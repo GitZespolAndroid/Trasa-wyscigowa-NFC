@@ -21,7 +21,6 @@ import android.nfc.NdefRecord;
 import android.os.AsyncTask;
 import android.widget.TextView;
 
-
 public class MainActivity extends ActionBarActivity {
 
     private NfcAdapter mNfcAdapter;
@@ -31,10 +30,6 @@ public class MainActivity extends ActionBarActivity {
     public static final String MIME_TEXT_PLAIN = "text/plain";
     public static final String TAG = "NfcDemo";
     int i = 0;
-
-
-
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -251,9 +246,4 @@ public class MainActivity extends ActionBarActivity {
             }
         }
     }
-
-
-
-
 }
-
