@@ -42,6 +42,8 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        final Button START = (Button) findViewById(R.id.PRZYCISK_START);
+        final Button STOP = (Button) findViewById(R.id.PRZYCISK_STOP);
 
         Log.i("Instance state", "onCreate");
 
@@ -63,6 +65,25 @@ public class MainActivity extends ActionBarActivity {
         } else { // Jeśli tak to wyświetl odpowiedni komunikat
             Toast.makeText(this, "NFC zostało włączone poprawnie.", Toast.LENGTH_LONG).show();
         }
+
+        //OBSLUGA PRZYCISKU START
+        START.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Perform action on click
+                START.setEnabled(false);
+            }
+        });
+
+
+        //OBSLUGA PRZYCISKU STOP
+        STOP.setOnClickListener(new View.OnClickListener() {
+            public void onClick(View v) {
+                // Perform action on click
+                START.setEnabled(false);
+            }
+        });
+
+
     }
 
 
@@ -254,25 +275,25 @@ public class MainActivity extends ActionBarActivity {
                         if (j < 4) {
                             if (j > 0){
                                 if (TABLICA2[j].equals(TABLICA2[j-1])){
-                                    Toast.makeText(getApplicationContext(), "Ta sama nalepka! Spróbój jeszcze raz!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(MainActivity.this, "Ta sama nalepka! Spróbój jeszcze raz!", Toast.LENGTH_SHORT).show();
                                 }
                                 else{
-                                    Toast.makeText(getApplicationContext(), "Dobra nalepka!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(MainActivity.this, "Dobra nalepka!", Toast.LENGTH_SHORT).show();
                                     j++;
                                 }
                             }
                             else{
-                                Toast.makeText(getApplicationContext(), "Dobra nalepka!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this, "Dobra nalepka!", Toast.LENGTH_SHORT).show();
                                 j++;
                             }
                         }
 
                         else if (j == 4){
                             if (TABLICA2[j].equals(TABLICA2[j-1])){
-                                Toast.makeText(getApplicationContext(), "Ta sama nalepka! Spróbój jeszcze raz!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this, "Ta sama nalepka! Spróbój jeszcze raz!", Toast.LENGTH_SHORT).show();
                             }
                             else{
-                                Toast.makeText(getApplicationContext(), "Dobra nalepka! Koniec trasy!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this, "Dobra nalepka! Koniec trasy!", Toast.LENGTH_SHORT).show();
                                 j++;
                             }
                         }
@@ -282,25 +303,25 @@ public class MainActivity extends ActionBarActivity {
                         if (j < 4) {
                             if (j > 0){
                                 if (TABLICA2[j].equals(TABLICA2[j-1])){
-                                    Toast.makeText(getApplicationContext(), "Ponownie zła nalepka! Spróbój jeszcze raz!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(MainActivity.this, "Ponownie zła nalepka! Spróbój jeszcze raz!", Toast.LENGTH_SHORT).show();
                                 }
                                 else{
-                                    Toast.makeText(getApplicationContext(), "Zła nalepka!", Toast.LENGTH_SHORT).show();
+                                    Toast.makeText(MainActivity.this, "Zła nalepka!", Toast.LENGTH_SHORT).show();
                                     j++;
                                 }
                             }
                             else{
-                                Toast.makeText(getApplicationContext(), "Zła nalepka!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this, "Zła nalepka!", Toast.LENGTH_SHORT).show();
                                 j++;
                             }
                         }
 
                         else if (j == 4){
                             if (TABLICA2[j].equals(TABLICA2[j-1])){
-                                Toast.makeText(getApplicationContext(), "Ponownie zła nalepka! Spróbój jeszcze raz!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this, "Ponownie zła nalepka! Spróbój jeszcze raz!", Toast.LENGTH_SHORT).show();
                             }
                             else{
-                                Toast.makeText(getApplicationContext(), "Zła nalepka! Koniec trasy!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this, "Zła nalepka! Koniec trasy!", Toast.LENGTH_SHORT).show();
                                 j++;
                             }
                         }
@@ -309,7 +330,7 @@ public class MainActivity extends ActionBarActivity {
                 mTextView.setText("Odczytana zawartość: " + result);
                 }
                 else {
-                    Toast.makeText(getApplicationContext(), "Koniec trasy!", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(MainActivity.this, "Koniec trasy!", Toast.LENGTH_SHORT).show();
                 }
             }
         }

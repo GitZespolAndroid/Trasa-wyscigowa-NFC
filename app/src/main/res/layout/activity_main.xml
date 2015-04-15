@@ -18,11 +18,20 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="STOP"
-        android:id="@+id/PRZYCISK1"
+        android:id="@+id/PRZYCISK_STOP"
         android:layout_marginBottom="84dp"
         android:enabled="false"
         android:layout_alignParentBottom="true"
         android:layout_alignRight="@+id/textView_explanation"
         android:layout_alignEnd="@+id/textView_explanation" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="START"
+        android:id="@+id/PRZYCISK_START"
+        android:layout_alignTop="@+id/PRZYCISK_STOP"
+        android:layout_toLeftOf="@+id/PRZYCISK_STOP"
+        android:layout_toStartOf="@+id/PRZYCISK_STOP" />
 
 </RelativeLayout>
