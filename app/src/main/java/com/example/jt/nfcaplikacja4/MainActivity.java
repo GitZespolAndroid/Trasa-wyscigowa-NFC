@@ -42,13 +42,14 @@ public class MainActivity extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        final Button START = (Button) findViewById(R.id.PRZYCISK_START);
-        final Button STOP = (Button) findViewById(R.id.PRZYCISK_STOP);
+
 
         Log.i("Instance state", "onCreate");
 
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
         mTextView = (TextView) findViewById(R.id.textView_explanation);
+        final Button START = (Button) findViewById(R.id.PRZYCISK_START);
+        final Button STOP = (Button) findViewById(R.id.PRZYCISK_STOP);
 
         // Sprawdzenie czy urządzenie wspiera NFC
         if (mNfcAdapter == null) { // Jeśli nie to wyświetl odpowiedni komunikat i zakończ aplikację
@@ -208,6 +209,10 @@ public class MainActivity extends ActionBarActivity {
     // Klasa realizująca odczyt zawartości z taga (poprzez funkcję HandleIntent)
     private class NdefReaderTask extends AsyncTask<Tag, Void, String> {
 
+        final Button START = (Button) findViewById(R.id.PRZYCISK_START);
+        final Button STOP = (Button) findViewById(R.id.PRZYCISK_STOP);
+
+
         @Override
         protected String doInBackground(Tag... params) {
             Tag tag = params[0];
@@ -313,6 +318,7 @@ public class MainActivity extends ActionBarActivity {
                             else{
                                 Toast.makeText(MainActivity.this, "Zła nalepka!", Toast.LENGTH_SHORT).show();
                                 j++;
+                                STOP.setEnabled(true);
                             }
                         }
 
