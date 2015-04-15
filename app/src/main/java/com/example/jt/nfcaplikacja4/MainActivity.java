@@ -6,8 +6,11 @@ import java.util.Arrays;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.nfc.NfcAdapter;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -20,6 +23,7 @@ import android.nfc.NdefMessage;
 import android.nfc.NdefRecord;
 import android.os.AsyncTask;
 import android.widget.TextView;
+import android.widget.Button;
 
 public class MainActivity extends ActionBarActivity {
 
@@ -30,6 +34,9 @@ public class MainActivity extends ActionBarActivity {
     public static final String MIME_TEXT_PLAIN = "text/plain";
     public static final String TAG = "NfcDemo";
     int i = 0;
+    String[] TABLICA1 = {"1","2","3","4","5","nn"};
+    String[] TABLICA2 = {"","","","","",""};
+    int j,m = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,13 +97,9 @@ public class MainActivity extends ActionBarActivity {
         return;
     }
 
-
-
-
     // Obsługa tagu bezpośrednio po wykryciu
     @Override
     protected void onNewIntent(Intent intent) {
-        Toast.makeText(this, "Wykryto nalepkę!.", Toast.LENGTH_LONG).show();
         handleIntent(intent); //Odczyt zawartości taga
     }
 
@@ -180,6 +183,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
 
+
     // Klasa realizująca odczyt zawartości z taga (poprzez funkcję HandleIntent)
     private class NdefReaderTask extends AsyncTask<Tag, Void, String> {
 
@@ -240,10 +244,75 @@ public class MainActivity extends ActionBarActivity {
         @Override
         protected void onPostExecute(String result) {
             if (result != null) {
-                mTextView.setText("Odczytana zawartość: " + result);
 
-                // TU BĘDZIE ZAWARTY DALSZY KOD ZWIĄZANY Z LOGIKĄ APLIKACJI (PORÓWNYWANIE TRESCI TAGÓW ITP.)
+                //PIERWSZA PRYMITYWNA TESTOWA WERSJA "LOGIKI" ZWIĄZANEJ ZE SPRAWDZANIEM KOLEJNOSCI ZESKANOWANIA NALEPEK NFC
+
+                if (j < 5){
+                    TABLICA2[j] = result;
+
+                    if (TABLICA1[j].equals(result)){
+                        if (j < 4) {
+                            if (j > 0){
+                                if (TABLICA2[j].equals(TABLICA2[j-1])){
+                                    Toast.makeText(getApplicationContext(), "Ta sama nalepka! Spróbój jeszcze raz!", Toast.LENGTH_SHORT).show();
+                                }
+                                else{
+                                    Toast.makeText(getApplicationContext(), "Dobra nalepka!", Toast.LENGTH_SHORT).show();
+                                    j++;
+                                }
+                            }
+                            else{
+                                Toast.makeText(getApplicationContext(), "Dobra nalepka!", Toast.LENGTH_SHORT).show();
+                                j++;
+                            }
+                        }
+
+                        else if (j == 4){
+                            if (TABLICA2[j].equals(TABLICA2[j-1])){
+                                Toast.makeText(getApplicationContext(), "Ta sama nalepka! Spróbój jeszcze raz!", Toast.LENGTH_SHORT).show();
+                            }
+                            else{
+                                Toast.makeText(getApplicationContext(), "Dobra nalepka! Koniec trasy!", Toast.LENGTH_SHORT).show();
+                                j++;
+                            }
+                        }
+
+                    }
+                    else {
+                        if (j < 4) {
+                            if (j > 0){
+                                if (TABLICA2[j].equals(TABLICA2[j-1])){
+                                    Toast.makeText(getApplicationContext(), "Ponownie zła nalepka! Spróbój jeszcze raz!", Toast.LENGTH_SHORT).show();
+                                }
+                                else{
+                                    Toast.makeText(getApplicationContext(), "Zła nalepka!", Toast.LENGTH_SHORT).show();
+                                    j++;
+                                }
+                            }
+                            else{
+                                Toast.makeText(getApplicationContext(), "Zła nalepka!", Toast.LENGTH_SHORT).show();
+                                j++;
+                            }
+                        }
+
+                        else if (j == 4){
+                            if (TABLICA2[j].equals(TABLICA2[j-1])){
+                                Toast.makeText(getApplicationContext(), "Ponownie zła nalepka! Spróbój jeszcze raz!", Toast.LENGTH_SHORT).show();
+                            }
+                            else{
+                                Toast.makeText(getApplicationContext(), "Zła nalepka! Koniec trasy!", Toast.LENGTH_SHORT).show();
+                                j++;
+                            }
+                        }
+                    }
+
+                mTextView.setText("Odczytana zawartość: " + result);
+                }
+                else {
+                    Toast.makeText(getApplicationContext(), "Koniec trasy!", Toast.LENGTH_SHORT).show();
+                }
             }
         }
     }
 }
+
