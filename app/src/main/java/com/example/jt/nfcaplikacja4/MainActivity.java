@@ -2,15 +2,22 @@ package com.example.jt.nfcaplikacja4;
 
 import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
+import java.util.concurrent.TimeUnit;
 
+import android.media.TimedText;
+import android.os.CountDownTimer;
+import android.os.Handler;
+import android.os.SystemClock;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.nfc.NfcAdapter;
 import android.view.LayoutInflater;
+import android.os.CountDownTimer;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Chronometer;
 import android.widget.Toast;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -29,6 +36,7 @@ public class MainActivity extends ActionBarActivity {
 
     private NfcAdapter mNfcAdapter;
     private TextView mTextView;
+    private TextView mCzas;
     private String mUser;
     static final String STATE_USER = "user";
     public static final String MIME_TEXT_PLAIN = "text/plain";
@@ -37,12 +45,14 @@ public class MainActivity extends ActionBarActivity {
     String[] TABLICA1 = {"1","2","3","4","5","nn"};
     String[] TABLICA2 = {"","","","","",""};
     int j,m = 0;
+    long time = 0;
+
+    // ZMIENNE ZWIĄZANE Z PRZYCISKAMI SĄ DANE ODRĘBNIE W KAŻDEJ Z FUNKCJI I KLAS, PONIEWAŻ W INNYM PRZYPADKU APLIKACJA "WYKRZACZA SIĘ"
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-
 
         Log.i("Instance state", "onCreate");
 
@@ -50,6 +60,7 @@ public class MainActivity extends ActionBarActivity {
         mTextView = (TextView) findViewById(R.id.textView_explanation);
         final Button START = (Button) findViewById(R.id.PRZYCISK_START);
         final Button STOP = (Button) findViewById(R.id.PRZYCISK_STOP);
+        final Chronometer chrono = (Chronometer) findViewById(R.id.chronometer);
 
         // Sprawdzenie czy urządzenie wspiera NFC
         if (mNfcAdapter == null) { // Jeśli nie to wyświetl odpowiedni komunikat i zakończ aplikację
@@ -72,6 +83,9 @@ public class MainActivity extends ActionBarActivity {
             public void onClick(View v) {
                 // Perform action on click
                 START.setEnabled(false);
+                STOP.setEnabled(true);
+                chrono.setBase(SystemClock.elapsedRealtime());
+                chrono.start();
             }
         });
 
@@ -80,13 +94,20 @@ public class MainActivity extends ActionBarActivity {
         STOP.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
                 // Perform action on click
-                START.setEnabled(false);
+                START.setEnabled(true);
+                STOP.setEnabled(false);
+
+                for (m = 0; m<6 ; m++){
+                    TABLICA2[m]="";
+                }
+
+                mTextView.setText("Zbliż do nalepki startowej");
+                chrono.stop();
+                chrono.setBase(SystemClock.elapsedRealtime());
             }
         });
 
-
     }
-
 
     // Włączenie ForegroundDispatcha w trakcie działania aplikacji lub jej wznowienia
     @Override
@@ -94,7 +115,6 @@ public class MainActivity extends ActionBarActivity {
         super.onResume();
         setupForegroundDispatch(this, mNfcAdapter);
     }
-
 
     // Wstrzymanie ForegroundDispatcha w trakcie wstrzymania aplikacji
     @Override
@@ -115,6 +135,7 @@ public class MainActivity extends ActionBarActivity {
         {
                Toast.makeText(this, "Wciśnij jeszcze raz aby zamknąć.", Toast.LENGTH_SHORT).show();
                i++;
+
         }
         return;
     }
@@ -122,11 +143,18 @@ public class MainActivity extends ActionBarActivity {
     // Obsługa tagu bezpośrednio po wykryciu
     @Override
     protected void onNewIntent(Intent intent) {
-        handleIntent(intent); //Odczyt zawartości taga
+
+        final Button START = (Button) findViewById(R.id.PRZYCISK_START);
+        final Button STOP = (Button) findViewById(R.id.PRZYCISK_STOP);
+
+        if (!START.isEnabled()) {
+            handleIntent(intent); //Odczyt zawartości taga
+        }
     }
 
     // Odczyt zawartości taga
     private void handleIntent(Intent intent) {
+
 
         String action = intent.getAction();
         if (NfcAdapter.ACTION_NDEF_DISCOVERED.equals(action)) {
@@ -318,7 +346,6 @@ public class MainActivity extends ActionBarActivity {
                             else{
                                 Toast.makeText(MainActivity.this, "Zła nalepka!", Toast.LENGTH_SHORT).show();
                                 j++;
-                                STOP.setEnabled(true);
                             }
                         }
 
@@ -341,5 +368,11 @@ public class MainActivity extends ActionBarActivity {
             }
         }
     }
+
+    // Klasa realizująca odliczanie czasu:
+
+
+
+
 }
 

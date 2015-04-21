@@ -34,4 +34,21 @@
         android:layout_toLeftOf="@+id/PRZYCISK_STOP"
         android:layout_toStartOf="@+id/PRZYCISK_STOP" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Czas biegu:"
+        android:id="@+id/textView"
+        android:layout_below="@+id/textView_explanation"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="47dp" />
+
+    <Chronometer
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/chronometer"
+        android:layout_below="@+id/textView"
+        android:layout_alignLeft="@+id/PRZYCISK_STOP"
+        android:layout_alignStart="@+id/PRZYCISK_STOP" />
+
 </RelativeLayout>
