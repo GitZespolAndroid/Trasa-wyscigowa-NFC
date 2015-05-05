@@ -4,10 +4,15 @@ import java.io.UnsupportedEncodingException;
 import java.util.Arrays;
 import java.util.concurrent.TimeUnit;
 
+import android.app.Activity;
 import android.media.TimedText;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.widget.DrawerLayout;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.nfc.NfcAdapter;
@@ -89,7 +94,6 @@ public class MainActivity extends ActionBarActivity {
             }
         });
 
-
         //OBSLUGA PRZYCISKU STOP
         STOP.setOnClickListener(new View.OnClickListener() {
             public void onClick(View v) {
@@ -97,8 +101,8 @@ public class MainActivity extends ActionBarActivity {
                 START.setEnabled(true);
                 STOP.setEnabled(false);
 
-                for (m = 0; m<6 ; m++){
-                    TABLICA2[m]="";
+                for (m = 0; m < 6; m++) {
+                    TABLICA2[m] = "";
                 }
 
                 mTextView.setText("Zbliż do nalepki startowej");
@@ -111,7 +115,7 @@ public class MainActivity extends ActionBarActivity {
 
     // Włączenie ForegroundDispatcha w trakcie działania aplikacji lub jej wznowienia
     @Override
-    protected void onResume() {
+        protected void onResume() {
         super.onResume();
         setupForegroundDispatch(this, mNfcAdapter);
     }
@@ -368,11 +372,5 @@ public class MainActivity extends ActionBarActivity {
             }
         }
     }
-
-    // Klasa realizująca odliczanie czasu:
-
-
-
-
 }
 
