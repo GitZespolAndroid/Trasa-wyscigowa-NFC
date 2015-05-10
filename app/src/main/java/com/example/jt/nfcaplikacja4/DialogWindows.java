@@ -6,19 +6,19 @@ import android.view.Menu;
 import android.view.MenuItem;
 
 
-public class Highscore extends ActionBarActivity {
+public class DialogWindows extends ActionBarActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_highscore);
+        setContentView(R.layout.activity_dialog_windows);
     }
 
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.menu_highscore, menu);
+        getMenuInflater().inflate(R.menu.menu_dialog_windows, menu);
         return true;
     }
 

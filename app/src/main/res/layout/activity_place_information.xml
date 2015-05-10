@@ -6,7 +6,75 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.example.jt.nfcaplikacja4.PlaceInformation">
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Informacje o miejscu:"
+        android:id="@+id/textView14"
+        android:textSize="22dp"
+        android:textColor="#ff000000"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText"
+        android:layout_below="@+id/textView14"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="20dp"
+        android:text="Informacje o miejscu:"
+        android:textSize="14dp"
+        android:layout_alignParentEnd="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText2"
+        android:text="Współrzędne:"
+        android:textSize="14dp"
+        android:layout_below="@+id/editText"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/editText" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText3"
+        android:text="Adres:"
+        android:textSize="14dp"
+        android:layout_below="@+id/editText2"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/editText2" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText4"
+        android:text="Adres WWW:"
+        android:textSize="14dp"
+        android:layout_below="@+id/editText3"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/editText3" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText5"
+        android:text="Zdjęcie (adres WWW):"
+        android:textSize="14dp"
+        android:layout_below="@+id/editText4"
+        android:layout_alignParentStart="true"
+        android:layout_alignParentEnd="true" />
+
+    <EditText
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/editText6"
+        android:text="Opis miejsca: "
+        android:textSize="14dp"
+        android:layout_below="@+id/editText5"
+        android:layout_alignParentStart="true"
+        android:layout_alignEnd="@+id/editText5" />
 
 </RelativeLayout>

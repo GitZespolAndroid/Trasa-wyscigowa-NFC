@@ -65,6 +65,10 @@
             android:name=".RunningHistory"
             android:label="@string/title_activity_running_history" >
         </activity>
+        <activity
+            android:name=".DialogWindows"
+            android:label="@string/title_activity_dialog_windows" >
+        </activity>
     </application>
 
 </manifest>

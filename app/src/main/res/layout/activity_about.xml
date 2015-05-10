@@ -6,7 +6,121 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     tools:context="com.example.jt.nfcaplikacja4.About">
 
-    <TextView android:text="@string/hello_world" android:layout_width="wrap_content"
-        android:layout_height="wrap_content" />
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="O aplikacji:"
+        android:id="@+id/textView2"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:textSize="22dp"
+        android:textColor="#ff000000" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="&quot;O mamo jak ja bym chciał pobiegać sobie, a ta mapa jest zbyt chaotyczna, aby wiedzieć gdzie biegnę ;(&quot; "
+        android:id="@+id/textView3"
+        android:textSize="13dp"
+        android:layout_marginTop="21dp"
+        android:layout_below="@+id/textView2"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="&quot;Rany boskie, ja już nie panuję nad sobą, jak ja mam iść do siebie w takim stanie :O&quot;"
+        android:id="@+id/textView4"
+        android:textSize="14dp"
+        android:layout_marginTop="13dp"
+        android:layout_below="@+id/textView3"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Zapewne wielokrotnie to słyszałeś przy różnych okazjach ;). Ale też zapewne chcesz sobie pobiegać w terenie, a jednocześnie nie wiesz co zrobić z nalepkami NFC, które kupiłeś? A może masz tak słabą pamięć lub chcesz sobie oznaczyć poszczególne miejsca, aby wiedzieć gdzie jesteś (np: po wspomnianym długim melanżu i koniecznym powrocie do domu? :P) Jeśli tak to dobrze trafiłeś! Bo my twoje oczekiwania spełnimy!  Już dziś obserwuj postępy naszych prac nad tą jedyną w swoim rodzaju aplikacją, która mamy nadzieję spodoba się tobie!"
+        android:id="@+id/textView5"
+        android:textSize="14dp"
+        android:layout_marginTop="13dp"
+        android:layout_below="@+id/textView4"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/textView6"
+        android:textSize="16dp"
+        android:layout_below="@+id/textView5"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="29dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Wersja aplikacji: 0.0.4"
+        android:id="@+id/textView7"
+        android:layout_alignBaseline="@+id/textView6"
+        android:layout_alignBottom="@+id/textView6"
+        android:layout_alignParentStart="true"
+        android:textSize="14dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Autorzy: GitZespółAndroid"
+        android:id="@+id/textView8"
+        android:layout_below="@+id/textView6"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="16dp"
+        android:textSize="14dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Skład zespołu:"
+        android:id="@+id/textView9"
+        android:textSize="14dp"
+        android:layout_below="@+id/textView8"
+        android:layout_alignParentStart="true"
+        android:layout_marginTop="16dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Członek 1 - Lider zespołu"
+        android:id="@+id/textView10"
+        android:textSize="14dp"
+        android:layout_marginTop="14dp"
+        android:layout_below="@+id/textView9"
+        android:layout_toEndOf="@+id/textView6"
+        android:layout_marginStart="19dp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Członek 2 - Project Manager"
+        android:id="@+id/textView11"
+        android:textSize="14dp"
+        android:layout_below="@+id/textView10"
+        android:layout_alignStart="@+id/textView10" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Członek 3 - Frontend Manager"
+        android:id="@+id/textView12"
+        android:textSize="14dp"
+        android:layout_below="@+id/textView11"
+        android:layout_alignStart="@+id/textView11" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Członek 4 - Backend Manager"
+        android:id="@+id/textView13"
+        android:textSize="14dp"
+        android:layout_below="@+id/textView12"
+        android:layout_alignStart="@+id/textView12" />
 
 </RelativeLayout>
