@@ -1,14 +1,22 @@
 package com.example.jt.nfcaplikacja4;
 
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import android.app.Activity;
+import android.graphics.Color;
+import android.location.Criteria;
+import android.location.Location;
+import android.location.LocationListener;
+import android.location.LocationManager;
 import android.media.TimedText;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.DrawerLayout;
@@ -37,7 +45,14 @@ import android.os.AsyncTask;
 import android.widget.TextView;
 import android.widget.Button;
 
-public class MainActivity extends ActionBarActivity {
+import com.google.android.gms.maps.CameraUpdateFactory;
+import com.google.android.gms.maps.GoogleMap;
+import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MarkerOptions;
+import com.google.android.gms.maps.model.PolylineOptions;
+
+public class MainActivity extends ActionBarActivity implements LocationListener{
 
     private NfcAdapter mNfcAdapter;
     private TextView mTextView;
@@ -51,6 +66,15 @@ public class MainActivity extends ActionBarActivity {
     String[] TABLICA2 = {"","","","","",""};
     int j,m = 0;
     long time = 0;
+    GoogleMap mMap;
+    PolylineOptions polylineOptions;
+    ArrayList<LatLng> coordList = new ArrayList<LatLng>();
+    double lan;
+    double lng;
+    LatLng bdTest;
+    LatLng bdTest1;
+    TextView LAT;
+    TextView LNG, SPEED, ACCURACY, LENGHT, DATA;
 
     // ZMIENNE ZWIĄZANE Z PRZYCISKAMI SĄ DANE ODRĘBNIE W KAŻDEJ Z FUNKCJI I KLAS, PONIEWAŻ W INNYM PRZYPADKU APLIKACJA "WYKRZACZA SIĘ"
 
@@ -66,22 +90,64 @@ public class MainActivity extends ActionBarActivity {
         final Button START = (Button) findViewById(R.id.PRZYCISK_START);
         final Button STOP = (Button) findViewById(R.id.PRZYCISK_STOP);
         final Chronometer chrono = (Chronometer) findViewById(R.id.chronometer);
+        LocationManager locationManager;
 
-        // Sprawdzenie czy urządzenie wspiera NFC
-        if (mNfcAdapter == null) { // Jeśli nie to wyświetl odpowiedni komunikat i zakończ aplikację
-            Toast.makeText(this, "To urządzenie nie wspiera NFC. Aplikacja zostanie zamknięta.", Toast.LENGTH_LONG).show();
+        mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
+                .getMap();
+
+        locationManager = (LocationManager)getSystemService(LOCATION_SERVICE);
+        List<String> str = locationManager.getProviders(true);
+
+        locationManager = (LocationManager)getSystemService(LOCATION_SERVICE);
+
+// Create a criteria object needed to retrieve the provider
+        Criteria criteria = new Criteria();
+
+// Get the name of the best available provider
+        String provider = locationManager.getBestProvider(criteria, true);
+
+// We can use the provider immediately to get the last known location
+        Location location = locationManager.getLastKnownLocation(provider);
+
+// request that the provider send this activity GPS updates every 20 seconds
+        locationManager.requestLocationUpdates(provider, 2000, 0, this);
+
+
+
+
+        // Sprawdzenie czy urządzenie zawiera GPS i NFC oraz czy są one włączone
+
+        if (mNfcAdapter == null && str.size()<=0){ // Jeśli nie to wyświetl odpowiedni komunikat i zakończ aplikację
+            Toast.makeText(this, "Urządzenie nie posiada NFC i GPS!", Toast.LENGTH_LONG).show();
             finish();
-            return;
+        }
+        else if(mNfcAdapter == null && str.size()>0) { // Jeśli nie to wyświetl odpowiedni komunikat i zakończ aplikację
+            Toast.makeText(this, "Urządzenie nie posiada NFC!", Toast.LENGTH_LONG).show();
+            finish();
+        }
+        else if(str.size()<=0 && mNfcAdapter != null) { // Jeśli nie to wyświetl odpowiedni komunikat i zakończ aplikację
+            Toast.makeText(this, "Urządzenie nie posiada GPS!", Toast.LENGTH_LONG).show();
+            finish();
         }
 
-        // Sprawdzenie czy w urządzeniu zostało włączone NFC
-        if (!mNfcAdapter.isEnabled()) { // Jeśli nie to wyświetl odpowiedni komunikat i zakończ aplikację
-            Toast.makeText(this, "Włącz NFC przed uruchomieniem aplikacji.", Toast.LENGTH_LONG).show();
-            finish();
+        // Sprawdzenie czy jest włączone NFC i GPS
 
-        } else { // Jeśli tak to wyświetl odpowiedni komunikat
-            Toast.makeText(this, "NFC zostało włączone poprawnie.", Toast.LENGTH_LONG).show();
-        }
+            if (!mNfcAdapter.isEnabled() && (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) &&
+                    !locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))) { // Jeśli nie to wyświetl odpowiedni komunikat i zakończ aplikację
+                Toast.makeText(this, "Włącz NFC i GPS przed uruchomieniem!", Toast.LENGTH_LONG).show();
+                finish();
+            } else if (!mNfcAdapter.isEnabled() && (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+                    locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))) { // Jeśli nie to wyświetl odpowiedni komunikat i zakończ aplikację
+                Toast.makeText(this, "Włącz NFC przed uruchomieniem!", Toast.LENGTH_LONG).show();
+                finish();
+            } else if ((!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) &&
+                    !locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) && mNfcAdapter.isEnabled()) { // Jeśli nie to wyświetl odpowiedni komunikat i zakończ aplikację
+                Toast.makeText(this, "Włącz GPS przed uruchomieniem!", Toast.LENGTH_LONG).show();
+                finish();
+            } else if ((locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+                    locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) && mNfcAdapter.isEnabled()){ // Jeśli nie to wyświetl odpowiedni komunikat i zakończ aplikację
+                Toast.makeText(this, "NFC i GPS zostały włączone poprawnie!", Toast.LENGTH_LONG).show();
+            }
 
         //OBSLUGA PRZYCISKU START
         START.setOnClickListener(new View.OnClickListener() {
@@ -236,6 +302,106 @@ public class MainActivity extends ActionBarActivity {
         return super.onOptionsItemSelected(item);
     }
 
+    // RYSOWANIE NA MAPIE GDY JEST ZAŁADOWANA
+
+    @Override
+    public void onLocationChanged(Location location) {
+
+        int t = 0;
+        LatLng currentPosition = new LatLng(lan, lng);
+
+        if (mMap != null)
+        {
+            drawMarker(location);
+        }
+    }
+
+    // OBSŁUGA MAPY
+
+    private void drawMarker(Location location) {
+        mMap.clear();
+        lan = Math.round(location.getLatitude() * 100000d) / 100000d;
+        lng = Math.round(location.getLongitude() * 100000d) / 100000d;
+        int p = 0;
+        int j = 0;
+        final Button START = (Button) findViewById(R.id.PRZYCISK_START);
+        final Button STOP = (Button) findViewById(R.id.PRZYCISK_STOP);
+
+//  convert the location object to a LatLng object that can be used by the map API
+        LatLng currentPosition = new LatLng(lan, lng);
+        polylineOptions = new PolylineOptions().width(10).color(Color.RED);
+
+// zoom to the current location
+        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 16));
+
+// add a marker to the map indicating our current position
+
+        if ((!START.isEnabled() && STOP.isEnabled())) {
+
+            mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 16));
+
+            if (coordList.isEmpty()) {
+                coordList.add(new LatLng(lan, lng));
+                mMap.addMarker(new MarkerOptions()
+                        .position(currentPosition)
+                        .snippet("Lat:" + lan + "Lng:" + lng));
+            } else if (location.getSpeed() >= 0.01) {
+                coordList.add(new LatLng(lan, lng));
+
+                if (coordList.size() > 2 && p == 1) {
+
+                    p = 0;
+                    coordList.set(coordList.size() - 1, coordList.get(coordList.size() - 2));
+                    mMap.addMarker(new MarkerOptions()
+                            .position(coordList.get(coordList.size() - 1))
+                            .snippet("Lat:" + lan + "Lng:" + lng));
+                } else if (coordList.size() >= 2) {
+
+                    coordList.set(1, coordList.get(0));
+                    mMap.addPolyline(polylineOptions.addAll(coordList));
+                    mMap.addMarker(new MarkerOptions()
+                            .position(coordList.get(coordList.size() - 1))
+                            .snippet("Lat:" + lan + "Lng:" + lng));
+
+                }
+            } else if (location.getSpeed() < 0.01) {
+
+                p = 1;
+                mMap.addPolyline(polylineOptions.addAll(coordList));
+
+                if (coordList.size() == 1) {
+                    mMap.addMarker(new MarkerOptions()
+                            .position(currentPosition)
+                            .snippet("Lat:" + lan + "Lng:" + lng));
+                } else if (coordList.size() > 1) {
+
+                    mMap.addMarker(new MarkerOptions()
+                            .position(coordList.get(coordList.size() - 1))
+                            .snippet("Lat:" + lan + "Lng:" + lng));
+                }
+            }
+        }
+
+        else if ((START.isEnabled() && !STOP.isEnabled())) {
+            coordList.clear();
+        }
+    }
+
+
+    @Override
+    public void onStatusChanged(String provider, int status, Bundle extras) {
+
+    }
+
+    @Override
+    public void onProviderEnabled(String provider) {
+
+    }
+
+    @Override
+    public void onProviderDisabled(String provider) {
+
+    }
 
 
     // Klasa realizująca odczyt zawartości z taga (poprzez funkcję HandleIntent)
