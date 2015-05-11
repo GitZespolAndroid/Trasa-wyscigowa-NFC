@@ -197,45 +197,52 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
     //--------MENU ROZWIJANE PO LEWO ---------------------------------------------------------------
 
     public void onNavigationDrawerItemSelected(int position) {
-        // update the main content by replacing fragments
+
         FragmentManager fragmentManager = getSupportFragmentManager();
-        fragmentManager.beginTransaction()
-                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
-                .commit();
 
         switch (position){
 
-            case 0 :
+            case 1 :
 
                 Intent intent = new Intent(this,PlaceInformation.class);
                 startActivity(intent);
+
                 break;
 
 
-            case 1:
+            case 2:
 
                 Intent intent2 = new Intent(this,RunHistory.class);
                 startActivity(intent2);
                 break;
 
-            case 2:
+            case 3:
 
 
             break;
-            case 3:
+            case 4:
 
                 Intent intent3 = new Intent(this,Sets.class);
                 startActivity(intent3);
                 break;
 
-            case 4:
+            case 5:
 
                 Intent intent4 = new Intent(this,About.class);
                 startActivity(intent4);
                 break;
 
+            default:
+                break;
+
 
         }
+
+        // update the main content by replacing fragments
+        fragmentManager.beginTransaction()
+                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+                .commit();
+
     }
 
     public void onSectionAttached(int number) {
@@ -268,6 +275,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
             return true;
         }
+
         return super.onCreateOptionsMenu(menu);
     }
 

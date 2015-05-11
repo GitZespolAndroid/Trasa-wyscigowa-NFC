@@ -94,7 +94,7 @@ public class NavigationDrawerFragment extends Fragment {
         mDrawerListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                selectItem(position);
+                selectItem(position+1);
             }
         });
         mDrawerListView.setAdapter(new ArrayAdapter<String>(
@@ -106,7 +106,7 @@ public class NavigationDrawerFragment extends Fragment {
                         "Historia biegów",
                         "Najlepszy wynik",
                         "Ustawienia",
-                        "O aplikacji"
+                        "O aplikacji",
                 }));
         mDrawerListView.setItemChecked(mCurrentSelectedPosition, true);
         return mDrawerListView;
