@@ -429,7 +429,6 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         polylineOptions = new PolylineOptions().width(10).color(Color.RED);
 
 // zoom to the current location
-        mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 16));
 
 // add a marker to the map indicating our current position
 
