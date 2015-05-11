@@ -240,7 +240,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
         // update the main content by replacing fragments
         fragmentManager.beginTransaction()
-                .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
+                .replace(R.id.container, PlaceholderFragment.newInstance(position))
                 .commit();
 
     }
