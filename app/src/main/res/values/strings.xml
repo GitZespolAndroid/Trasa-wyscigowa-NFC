@@ -24,5 +24,7 @@
 
     <string name="drawer_open">Open</string>
     <string name="drawer_close">Close</string>
+    <string name="title_activity_run_history">RunHistory</string>
+    <string name="title_activity_sets">Sets</string>
 
 </resources>
