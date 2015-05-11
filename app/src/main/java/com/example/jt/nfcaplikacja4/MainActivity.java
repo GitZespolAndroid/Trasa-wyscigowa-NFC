@@ -127,6 +127,9 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
 
 
+
+
+
         // Sprawdzenie czy urządzenie zawiera GPS i NFC oraz czy są one włączone
 
         if (mNfcAdapter == null && str.size()<=0){ // Jeśli nie to wyświetl odpowiedni komunikat i zakończ aplikację
@@ -199,6 +202,40 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         fragmentManager.beginTransaction()
                 .replace(R.id.container, PlaceholderFragment.newInstance(position + 1))
                 .commit();
+
+        switch (position){
+
+            case 0 :
+
+                Intent intent = new Intent(this,PlaceInformation.class);
+                startActivity(intent);
+                break;
+
+
+            case 1:
+
+                Intent intent2 = new Intent(this,RunHistory.class);
+                startActivity(intent2);
+                break;
+
+            case 2:
+
+
+            break;
+            case 3:
+
+                Intent intent3 = new Intent(this,Sets.class);
+                startActivity(intent3);
+                break;
+
+            case 4:
+
+                Intent intent4 = new Intent(this,About.class);
+                startActivity(intent4);
+                break;
+
+
+        }
     }
 
     public void onSectionAttached(int number) {
