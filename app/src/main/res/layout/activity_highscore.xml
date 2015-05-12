@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:orientation="vertical" android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="24dip"
+        android:layout_marginRight="20dip"
+        android:text="Najlepszy twój czas biegu wynosi:"
+        android:gravity="left"
+        android:id="@+id/textView"
+        android:layout_marginTop="20dip"
+        android:textSize="19dp" />
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="24dip"
+        android:layout_marginRight="25dip"
+        android:text="00:00:00:000"
+        android:gravity="left"
+        android:id="@+id/textView17"
+        android:layout_marginTop="25dip"
+        android:textSize="16dp"
+        android:layout_gravity="center_horizontal" />
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="24dip"
+        android:layout_marginRight="20dip"
+        android:text="Był to bieg o nazwie:"
+        android:gravity="left"
+        android:id="@+id/textView2"
+        android:layout_marginTop="25dip"
+        android:textSize="14dp" />
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="24dip"
+        android:layout_marginRight="20dip"
+        android:text="Dnia:"
+        android:gravity="left"
+        android:id="@+id/textView3"
+        android:layout_marginTop="20dip"
+        android:textSize="14dp" />
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="24dip"
+        android:layout_marginRight="20dip"
+        android:text="Zeskanowałeś łącznie:       nalepek"
+        android:gravity="left"
+        android:id="@+id/textView4"
+        android:layout_marginTop="20dip"
+        android:textSize="14dp" />
+
+    <TextView
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        android:layout_marginLeft="24dip"
+        android:layout_marginRight="20dip"
+        android:text="z czego:       dobrze, a       źle"
+        android:gravity="left"
+        android:id="@+id/textView16"
+        android:layout_marginTop="20dip"
+        android:textSize="14dp"
+        android:layout_marginBottom="10dip" />
+
+
+</LinearLayout>

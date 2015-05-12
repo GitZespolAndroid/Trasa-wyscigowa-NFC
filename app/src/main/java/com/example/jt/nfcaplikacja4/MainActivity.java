@@ -7,6 +7,9 @@ import java.util.List;
 import java.util.concurrent.TimeUnit;
 
 import android.app.Activity;
+import android.app.AlertDialog;
+import android.app.Dialog;
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
@@ -31,6 +34,7 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Chronometer;
+import android.widget.EditText;
 import android.widget.Toast;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -94,6 +98,8 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         final Chronometer chrono = (Chronometer) findViewById(R.id.chronometer);
         LocationManager locationManager;
 
+        //------------------------OBIEKTY DO MAPY------------------------------------------------
+
         mMap = ((MapFragment) getFragmentManager().findFragmentById(R.id.map))
                 .getMap();
 
@@ -114,6 +120,10 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 // request that the provider send this activity GPS updates every 20 seconds
         locationManager.requestLocationUpdates(provider, 2000, 0, this);
 
+        //-------------------------------------------------------------------------------------
+
+
+        //-------------------OBIEKTY DO ROZWIJANEGO PO LEWO MENU-------------------------------
 
         mNavigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -124,10 +134,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                 R.id.navigation_drawer,
                 (DrawerLayout) findViewById(R.id.drawer_layout));
 
-
-
-
-
+        //-------------------------------------------------------------------------------------
 
 
         // Sprawdzenie czy urządzenie zawiera GPS i NFC oraz czy są one włączone
@@ -170,8 +177,6 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                 // Perform action on click
                 START.setEnabled(false);
                 STOP.setEnabled(true);
-                chrono.setBase(SystemClock.elapsedRealtime());
-                chrono.start();
             }
         });
 
@@ -218,6 +223,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
             case 3:
 
+                Highscore();
 
             break;
             case 4:
@@ -413,7 +419,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         }
     }
 
-    // OBSŁUGA MAPY
+    // OBSŁUGA MAPY (RYSOWANIE KURSORA I SLADU BIEGU NA MAPIE)
 
     private void drawMarker(Location location) {
         mMap.clear();
@@ -563,6 +569,9 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         //Wyświelt pobraną zawartość taga z doInBackground (realizacja bezpośrednio po zakończeniu się doInBackground).
         @Override
         protected void onPostExecute(String result) {
+
+            final Chronometer chrono = (Chronometer) findViewById(R.id.chronometer);
+
             if (result != null) {
 
                 //PIERWSZA PRYMITYWNA TESTOWA WERSJA "LOGIKI" ZWIĄZANEJ ZE SPRAWDZANIEM KOLEJNOSCI ZESKANOWANIA NALEPEK NFC
@@ -584,6 +593,8 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                             else{
                                 Toast.makeText(MainActivity.this, "Dobra nalepka!", Toast.LENGTH_SHORT).show();
                                 j++;
+                                chrono.setBase(SystemClock.elapsedRealtime());
+                                chrono.start();
                             }
                         }
 
@@ -594,6 +605,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                             else{
                                 Toast.makeText(MainActivity.this, "Dobra nalepka! Koniec trasy!", Toast.LENGTH_SHORT).show();
                                 j++;
+                                EndOfRun();
                             }
                         }
 
@@ -612,6 +624,8 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                             else{
                                 Toast.makeText(MainActivity.this, "Zła nalepka!", Toast.LENGTH_SHORT).show();
                                 j++;
+                                chrono.setBase(SystemClock.elapsedRealtime());
+                                chrono.start();
                             }
                         }
 
@@ -622,6 +636,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                             else{
                                 Toast.makeText(MainActivity.this, "Zła nalepka! Koniec trasy!", Toast.LENGTH_SHORT).show();
                                 j++;
+                                EndOfRun();
                             }
                         }
                     }
@@ -630,10 +645,88 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                 }
                 else {
                     Toast.makeText(MainActivity.this, "Koniec trasy!", Toast.LENGTH_SHORT).show();
+                    EndOfRun();
                 }
             }
         }
     }
+
+    // WYSWIETLANIE OKIENKA Z ZAPISEM BIEGU DO HISTORII (PO SKONCZONYM BIEGU) I OBSŁUGA PRZYCISKOW ORAZ STOPERA PO ZAKONCZENIU BIEGU
+
+    public void EndOfRun(){
+
+        LayoutInflater inf = LayoutInflater.from(this);
+        final View view = inf.inflate(R.layout.activity_end_of_run, null);
+        final EditText edt = (EditText)view.findViewById(R.id.editText);
+        edt.setCursorVisible(false);
+        edt.selectAll();
+
+        final Button START = (Button) findViewById(R.id.PRZYCISK_START);
+        final Button STOP = (Button) findViewById(R.id.PRZYCISK_STOP);
+        final Chronometer chrono = (Chronometer) findViewById(R.id.chronometer);
+
+        STOP.setEnabled(false);
+        START.setEnabled(true);
+
+        chrono.stop();
+        chrono.setBase(SystemClock.elapsedRealtime());
+
+        edt.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                edt.setCursorVisible(true);
+            }
+        });
+
+        new AlertDialog.Builder(this)
+                .setTitle("Zapisz wynik do historii!")
+                .setView(view)
+                .setNeutralButton("PUBLIKUJ WYNIK NA FB", new Dialog.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                })
+                .setPositiveButton("ZATWIERDŹ",  new Dialog.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+
+                    }
+                })
+                .show();
+    }
+
+    // WYSWIETLANIE OKIENKA Z NAJLEPSZYM CZASEM BIEGU
+
+    public void Highscore(){
+
+        LayoutInflater inf = LayoutInflater.from(this);
+        final View view = inf.inflate(R.layout.activity_highscore, null);
+
+        new AlertDialog.Builder(this)
+                .setTitle("Najlepszy wynik")
+                .setView(view)
+                .setNeutralButton("PUBLIKUJ WYNIK NA FB", new Dialog.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                })
+                .setPositiveButton("OK",  new Dialog.OnClickListener() {
+
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                })
+                .show();
+    }
+
+    // ------------------------ KLASA DO MENU ROZWIJANEGO PO LEWO ---------------------------------
 
     /**
      * A placeholder fragment containing a simple view.
@@ -675,7 +768,6 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         }
     }
 
-
-
+    //---------------------------------------------------------------------------------------------
 }
 

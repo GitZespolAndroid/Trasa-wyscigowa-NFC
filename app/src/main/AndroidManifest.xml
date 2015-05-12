@@ -58,10 +58,6 @@
             android:label="@string/title_activity_highscore" >
         </activity>
         <activity
-            android:name=".DialogWindows"
-            android:label="@string/title_activity_dialog_windows" >
-        </activity>
-        <activity
             android:name=".RunHistory"
             android:label="@string/title_activity_run_history" >
         </activity>
