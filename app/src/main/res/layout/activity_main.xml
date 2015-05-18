@@ -9,53 +9,16 @@
 
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools" android:layout_width="match_parent"
-    android:layout_height="match_parent" android:paddingLeft="@dimen/activity_horizontal_margin"
-    android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin"
-    android:paddingBottom="@dimen/activity_vertical_margin" tools:context=".MainActivity">
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:textAppearance="?android:attr/textAppearanceSmall"
-        android:text="Zbliż do nalepki startowej"
-        android:id="@+id/textView_explanation"
-        android:layout_marginTop="27dp"
-        android:layout_below="@+id/PRZYCISK_STOP"
-        android:layout_centerHorizontal="true" />
-
-    <Button
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="STOP"
-        android:id="@+id/PRZYCISK_STOP"
-        android:enabled="false"
-        android:layout_alignParentTop="true"
-        android:layout_toEndOf="@+id/textView_explanation" />
+    android:layout_height="match_parent"
+    tools:context=".MainActivity">
 
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="START"
         android:id="@+id/PRZYCISK_START"
-        android:layout_alignParentTop="true"
-        android:layout_alignEnd="@+id/textView_explanation" />
-
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Czas biegu:"
-        android:id="@+id/textView"
-        android:layout_marginTop="25dp"
-        android:layout_below="@+id/textView_explanation"
-        android:layout_centerHorizontal="true" />
-
-    <Chronometer
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/chronometer"
-        android:layout_below="@+id/textView"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignTop="@+id/map"
+        android:layout_toStartOf="@+id/PRZYCISK_STOP" />
 
     <Button
         android:layout_width="wrap_content"
@@ -63,16 +26,42 @@
         android:text="Wczytaj trasę"
         android:id="@+id/button"
         android:layout_alignParentTop="true"
-        android:layout_toStartOf="@+id/PRZYCISK_START" />
+        android:layout_alignParentStart="true" />
 
     <fragment
-        android:layout_width="match_parent"
+        android:layout_width="fill_parent"
         android:layout_height="match_parent"
         android:name="com.google.android.gms.maps.MapFragment"
         android:id="@+id/map"
-        android:layout_below="@+id/chronometer"
-        android:layout_marginTop="10dp"
-        android:layout_centerHorizontal="true" />
+        android:layout_alignParentStart="true"
+        android:layout_alignTop="@+id/button"
+        android:layout_alignParentEnd="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Czas biegu:"
+        android:id="@+id/textView"
+        android:layout_marginRight="3sp"
+        android:layout_below="@+id/button"
+        android:layout_alignParentStart="true"
+        android:layout_marginLeft="5sp" />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="STOP"
+        android:id="@+id/PRZYCISK_STOP"
+        android:enabled="false"
+        android:layout_alignTop="@+id/map"
+        android:layout_alignEnd="@+id/map" />
+
+    <Chronometer
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/chronometer"
+        android:layout_alignTop="@+id/textView"
+        android:layout_toEndOf="@+id/textView" />
 
 
 </RelativeLayout>

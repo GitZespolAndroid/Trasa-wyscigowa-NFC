@@ -119,7 +119,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         Log.i("Instance state", "onCreate");
 
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
-        mTextView = (TextView) findViewById(R.id.textView_explanation);
+
         final Button START = (Button) findViewById(R.id.PRZYCISK_START);
         final Button STOP = (Button) findViewById(R.id.PRZYCISK_STOP);
         final Chronometer chrono = (Chronometer) findViewById(R.id.chronometer);
