@@ -1,8 +1,10 @@
 package com.example.jt.nfcaplikacja4;
 
+import java.io.File;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 
@@ -16,6 +18,7 @@ import android.location.Location;
 import android.location.LocationListener;
 import android.location.LocationManager;
 import android.media.TimedText;
+import android.net.Uri;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.SystemClock;
@@ -33,8 +36,13 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.webkit.MimeTypeMap;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Chronometer;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.ListView;
 import android.widget.Toast;
 import android.content.Intent;
 import android.content.IntentFilter;
@@ -82,6 +90,25 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private CharSequence mTitle;
 
+    Button buttonOpenDialog;
+    Button buttonUp;
+    TextView textFolder;
+    ImageView image;
+    int o = 0;
+
+    String KEY_TEXTPSS = "TEXTPSS";
+    static final int CUSTOM_DIALOG_ID = 0;
+
+    ListView dialog_ListView;
+
+    File root;
+    File curFolder;
+
+    private List<String> fileList = new ArrayList<String>();
+    private List<String> fileList2 = new ArrayList<String>();
+
+
+
     // ZMIENNE ZWIĄZANE Z PRZYCISKAMI SĄ DANE ODRĘBNIE W KAŻDEJ Z FUNKCJI I KLAS, PONIEWAŻ W INNYM PRZYPADKU APLIKACJA "WYKRZACZA SIĘ"
 
     @Override
@@ -97,6 +124,24 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         final Button STOP = (Button) findViewById(R.id.PRZYCISK_STOP);
         final Chronometer chrono = (Chronometer) findViewById(R.id.chronometer);
         LocationManager locationManager;
+
+        image = (ImageView) findViewById(R.id.image);
+
+        buttonOpenDialog = (Button) findViewById(R.id.button);
+        buttonOpenDialog.setOnClickListener(new Button.OnClickListener() {
+
+            @Override
+            public void onClick(View arg0) {
+                showDialog(CUSTOM_DIALOG_ID);
+            }
+        });
+
+        root = new File("/");
+        curFolder = root;
+
+
+
+
 
         //------------------------OBIEKTY DO MAPY------------------------------------------------
 
@@ -196,6 +241,14 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                 chrono.setBase(SystemClock.elapsedRealtime());
             }
         });
+
+        //OBLUGA PRZYCISKU "WCZYTAJ TRASE"
+
+
+
+
+
+
 
     }
 
@@ -768,6 +821,170 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         }
     }
 
-    //---------------------------------------------------------------------------------------------
+    //----------------------OTWIERANIE PLIKU Z TRASĄ I WCZYTYWANIE----------------------------------
+
+    @Override
+    protected Dialog onCreateDialog(int id) {
+
+        Dialog dialog = null;
+
+        switch (id) {
+            case CUSTOM_DIALOG_ID:
+
+                dialog = new Dialog(MainActivity.this);
+                dialog.setContentView(R.layout.dialoglayout);
+                dialog.setTitle("Otwórz plik z trasą:");
+                dialog.setCancelable(true);
+                dialog.setCanceledOnTouchOutside(true);
+
+
+                textFolder = (TextView) dialog.findViewById(R.id.folder);
+                buttonUp = (Button) dialog.findViewById(R.id.up);
+                buttonUp.setOnClickListener(new View.OnClickListener() {
+
+                    @Override
+                    public void onClick(View v) {
+                        // TODO Auto-generated method stub
+                        ListDir(curFolder.getParentFile());
+                    }
+                });
+
+                //Prepare ListView in dialog
+                dialog_ListView = (ListView) dialog.findViewById(R.id.dialoglist);
+
+                dialog_ListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
+
+                    @Override
+                    public void onItemClick(AdapterView<?> parent, View view,
+                                            int position, long id) {
+
+                        File selected = new File(fileList.get(position));
+                        if (selected.isDirectory()) {
+                            ListDir(selected);
+                        } else {
+
+
+
+                            Toast.makeText(MainActivity.this,
+                                    selected.toString() + " selected",
+                                    Toast.LENGTH_LONG).show();
+                            dismissDialog(CUSTOM_DIALOG_ID);
+
+
+
+
+                            // ODCZYT PLIKU TXT
+
+                        }
+
+                    }
+                });
+
+                break;
+        }
+
+        return dialog;
+    }
+
+    @Override
+    protected void onPrepareDialog(int id, Dialog dialog, Bundle bundle) {
+        // TODO Auto-generated method stub
+        super.onPrepareDialog(id, dialog, bundle);
+
+        switch (id) {
+            case CUSTOM_DIALOG_ID:
+                ListDir(curFolder);
+                break;
+        }
+
+    }
+
+    void ListDir(File f) {
+
+        if (f.equals(root)) {
+            buttonUp.setEnabled(false);
+            o = 1;
+        } else {
+            buttonUp.setEnabled(true);
+            o = 0;
+        }
+
+        curFolder = f;
+        textFolder.setText(f.getPath());
+
+        File[] files = f.listFiles();
+        fileList.clear();
+        fileList2.clear();
+
+
+        if (files == null){
+
+            ArrayAdapter<String> directoryList
+                    = new ArrayAdapter<String>(this,
+                    android.R.layout.simple_list_item_1, fileList2);
+            dialog_ListView.setAdapter(directoryList);
+        }
+
+        else {
+
+            Arrays.sort(files, filecomparator);
+
+            for (int i=0; i < files.length; i++) {
+
+                File file = files[i];
+
+                if (file.isDirectory()) {
+
+                    fileList.add(file.getPath());
+                    fileList2.add(file.getName());
+
+
+                } else {
+
+                    Uri selectedUri = Uri.fromFile(file);
+                    String fileExtension
+                            = MimeTypeMap.getFileExtensionFromUrl(selectedUri.toString());
+                    if (fileExtension.equalsIgnoreCase("txt")) {
+                        fileList.add(file.getPath());
+                        fileList2.add(file.getName());
+                    }
+                }
+
+
+            }
+
+            ArrayAdapter<String> directoryList
+                    = new ArrayAdapter<String>(this,
+                    android.R.layout.simple_list_item_1, fileList2);
+
+            dialog_ListView.setAdapter(directoryList);
+
+        }
+    }
+
+
+    Comparator<? super File> filecomparator = new Comparator<File>(){
+
+        public int compare(File file1, File file2) {
+
+            if(file1.isDirectory()){
+                if (file2.isDirectory()){
+                    return String.valueOf(file1.getName().toLowerCase()).compareTo(file2.getName().toLowerCase());
+                }else{
+                    return -1;
+                }
+            }else {
+                if (file2.isDirectory()){
+                    return 1;
+                }else{
+                    return String.valueOf(file1.getName().toLowerCase()).compareTo(file2.getName().toLowerCase());
+                }
+            }
+
+        }
+    };
+
+
+
 }
 
