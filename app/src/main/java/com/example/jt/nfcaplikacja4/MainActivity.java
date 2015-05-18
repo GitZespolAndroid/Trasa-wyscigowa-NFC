@@ -116,6 +116,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
         Log.i("Instance state", "onCreate");
 
+
         mNfcAdapter = NfcAdapter.getDefaultAdapter(this);
 
         final Button START = (Button) findViewById(R.id.PRZYCISK_START);
@@ -136,6 +137,8 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
         root = new File("/");
         curFolder = root;
+
+
 
 
         //------------------------OBIEKTY DO MAPY------------------------------------------------
