@@ -107,8 +107,6 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
     private List<String> fileList = new ArrayList<String>();
     private List<String> fileList2 = new ArrayList<String>();
 
-
-
     // ZMIENNE ZWIĄZANE Z PRZYCISKAMI SĄ DANE ODRĘBNIE W KAŻDEJ Z FUNKCJI I KLAS, PONIEWAŻ W INNYM PRZYPADKU APLIKACJA "WYKRZACZA SIĘ"
 
     @Override
@@ -138,9 +136,6 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
         root = new File("/");
         curFolder = root;
-
-
-
 
 
         //------------------------OBIEKTY DO MAPY------------------------------------------------
@@ -984,7 +979,4 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         }
     };
 
-
-
 }
-
