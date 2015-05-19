@@ -235,6 +235,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                 TextView Dystans = (TextView) findViewById(R.id.textView27);
                 Dystans.setText(String.valueOf("0 m"));
                 b = 0;
+                j = 0;
 
             }
         });
@@ -528,8 +529,8 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
                     }
 
-                    if (distance<1000){Dystans.setText(String.valueOf(distance) + " m");}
-                    else if(distance>1000 && distance!=0) {Dystans.setText(String.valueOf(distance/1000) + " km");}
+                    if (distance<1000){Dystans.setText(String.valueOf(Math.round(((distance/1000)*1000d)/1000d)) + " m");}
+                    else if(distance>1000 && distance!=0) {Dystans.setText(String.valueOf(Math.round(((distance/1000)*1000d)/1000d))  + " km");}
 
 
                 } else if (coordList.size() >= 2) {
@@ -553,8 +554,10 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
                     }
 
-                    if (distance<1000){Dystans.setText(String.valueOf(distance) + " m");}
-                    else if(distance>1000 && distance!=0) {Dystans.setText(String.valueOf(distance/1000) + " km");}
+                    if (distance<1000){Dystans.setText(String.valueOf(Math.round(((distance/1000)*1000d)/1000d)) + " m");}
+                    else if(distance>1000 && distance!=0) {Dystans.setText(String.valueOf(Math.round(((distance/1000)*1000d)/1000d)) + " km");}
+
+
 
                 }
             } else if (location.getSpeed() < 0.01) {
@@ -761,6 +764,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
         chrono.stop();
         chrono.setBase(SystemClock.elapsedRealtime());
+        j = 0;
 
         edt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -903,14 +907,10 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                             ListDir(selected);
                         } else {
 
-
-
                             Toast.makeText(MainActivity.this,
                                     selected.toString() + " selected",
                                     Toast.LENGTH_LONG).show();
                             dismissDialog(CUSTOM_DIALOG_ID);
-
-
 
 
                             // ODCZYT PLIKU TXT
