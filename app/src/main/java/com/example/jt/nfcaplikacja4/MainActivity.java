@@ -233,7 +233,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                 chrono.setBase(SystemClock.elapsedRealtime());
                 distance = 0;
                 TextView Dystans = (TextView) findViewById(R.id.textView27);
-                Dystans.setText(String.valueOf(distance));
+                Dystans.setText(String.valueOf("0 m"));
                 b = 0;
 
             }
