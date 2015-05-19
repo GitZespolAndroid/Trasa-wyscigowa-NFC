@@ -492,6 +492,9 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         Location crntLocation = new Location("crntlocation");
         Location newLocation = new Location("newlocation");
 
+        TextView PREDKOSC = (TextView) findViewById(R.id.textView32);
+        TextView WYSOKOSCTERENU = (TextView) findViewById(R.id.textView29);
+
 // zoom to the current location
 
 // add a marker to the map indicating our current position
@@ -499,6 +502,8 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         if ((!START.isEnabled() && STOP.isEnabled() && b == 1)) {
 
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 16));
+            PREDKOSC.setText(String.valueOf(location.getSpeed()));
+            WYSOKOSCTERENU.setText(String.valueOf(location.getAltitude()));
 
             if (coordList.isEmpty()) {
                 coordList.add(new LatLng(lan, lng));
@@ -529,7 +534,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
                     }
 
-                    if (distance<1000){Dystans.setText(String.valueOf(Math.round(((distance)*1000d)/1000d)) + " m");}
+                    if (distance<1000){Dystans.setText(String.valueOf(Math.round(((distance)*10d)/10d)) + " m");}
                     else if(distance>1000 && distance!=0) {Dystans.setText(String.valueOf(Math.round(((distance/1000)*1000d)/1000d))  + " km");}
 
 
@@ -554,7 +559,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
                     }
 
-                    if (distance<1000){Dystans.setText(String.valueOf(Math.round(((distance)*1000d)/1000d)) + " m");}
+                    if (distance<1000){Dystans.setText(String.valueOf(Math.round(((distance)*10d)/10d)) + " m");}
                     else if(distance>1000 && distance!=0) {Dystans.setText(String.valueOf(Math.round(((distance/1000)*1000d)/1000d)) + " km");}
 
 
