@@ -85,7 +85,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
     double lng;
     LatLng bdTest;
     LatLng bdTest1;
-    TextView LAT, Dystans;
+    TextView LAT;
     TextView LNG, SPEED, ACCURACY, LENGHT, DATA;
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private CharSequence mTitle;
@@ -485,7 +485,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 //  convert the location object to a LatLng object that can be used by the map API
         LatLng currentPosition = new LatLng(lan, lng);
         polylineOptions = new PolylineOptions().width(10).color(Color.RED);
-        Dystans = (TextView) findViewById(R.id.textView27);
+        TextView Dystans = (TextView) findViewById(R.id.textView27);
 
 // zoom to the current location
 
