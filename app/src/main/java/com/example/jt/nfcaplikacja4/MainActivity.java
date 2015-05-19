@@ -509,8 +509,8 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         if ((!START.isEnabled() && STOP.isEnabled() && b == 1)) {
 
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 16));
-            PREDKOSC.setText(String.valueOf(location.getSpeed()));
-            WYSOKOSCTERENU.setText(String.valueOf(location.getAltitude()));
+            PREDKOSC.setText(String.valueOf(Math.round((location.getSpeed() * 100d) / 100d) + " km/h"));
+            WYSOKOSCTERENU.setText(String.valueOf(location.getAltitude() + " m.n.p.m"));
 
             if (coordList.isEmpty()) {
                 coordList.add(new LatLng(lan, lng));
