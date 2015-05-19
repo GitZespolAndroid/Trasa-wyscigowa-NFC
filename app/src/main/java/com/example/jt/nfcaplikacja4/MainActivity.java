@@ -486,12 +486,14 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         LatLng currentPosition = new LatLng(lan, lng);
         polylineOptions = new PolylineOptions().width(10).color(Color.RED);
         TextView Dystans = (TextView) findViewById(R.id.textView27);
+        Location crntLocation = new Location("crntlocation");
+        Location newLocation = new Location("newlocation");
 
 // zoom to the current location
 
 // add a marker to the map indicating our current position
 
-        if ((!START.isEnabled() && STOP.isEnabled()) && b == 1) {
+        if ((!START.isEnabled() && STOP.isEnabled() && b == 1)) {
 
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 16));
 
@@ -511,13 +513,11 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                             .position(coordList.get(coordList.size() - 1))
                             .snippet("Lat:" + lan + "Lng:" + lng));
 
-                    for (int l = 0; l<coordList.size(); l++) {
+                    for (int l = 0; l<coordList.size()-1; l++) {
 
-                        Location crntLocation = new Location("crntlocation");
                         crntLocation.setLatitude(coordList.get(l).latitude);
                         crntLocation.setLongitude(coordList.get(l).longitude);
 
-                        Location newLocation = new Location("newlocation");
                         newLocation.setLatitude(coordList.get(l+1).latitude);
                         newLocation.setLongitude(coordList.get(l+1).longitude);
 
@@ -538,13 +538,11 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                             .position(coordList.get(coordList.size() - 1))
                             .snippet("Lat:" + lan + "Lng:" + lng));
 
-                    for (int l = 0; l<coordList.size(); l++) {
+                    for (int l = 0; l<coordList.size()-1; l++) {
 
-                        Location crntLocation = new Location("crntlocation");
                         crntLocation.setLatitude(coordList.get(l).latitude);
                         crntLocation.setLongitude(coordList.get(l).longitude);
 
-                        Location newLocation = new Location("newlocation");
                         newLocation.setLatitude(coordList.get(l+1).latitude);
                         newLocation.setLongitude(coordList.get(l+1).longitude);
 
