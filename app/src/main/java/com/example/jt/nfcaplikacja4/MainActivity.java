@@ -120,6 +120,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
         final Button START = (Button) findViewById(R.id.PRZYCISK_START);
         final Button STOP = (Button) findViewById(R.id.PRZYCISK_STOP);
+        final Button WCZYTAJTRASE = (Button) findViewById(R.id.button);
         final Chronometer chrono = (Chronometer) findViewById(R.id.chronometer);
         LocationManager locationManager;
 
@@ -219,6 +220,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                 // Perform action on click
                 START.setEnabled(false);
                 STOP.setEnabled(true);
+                WCZYTAJTRASE.setEnabled(false);
             }
         });
 
@@ -228,6 +230,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                 // Perform action on click
                 START.setEnabled(true);
                 STOP.setEnabled(false);
+                WCZYTAJTRASE.setEnabled(true);
 
                 for (m = 0; m < 6; m++) {
                     TABLICA2[m] = "";
