@@ -529,7 +529,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
                     }
 
-                    if (distance<1000){Dystans.setText(String.valueOf(Math.round(((distance/1000)*1000d)/1000d)) + " m");}
+                    if (distance<1000){Dystans.setText(String.valueOf(Math.round(((distance)*1000d)/1000d)) + " m");}
                     else if(distance>1000 && distance!=0) {Dystans.setText(String.valueOf(Math.round(((distance/1000)*1000d)/1000d))  + " km");}
 
 
@@ -554,7 +554,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
                     }
 
-                    if (distance<1000){Dystans.setText(String.valueOf(Math.round(((distance/1000)*1000d)/1000d)) + " m");}
+                    if (distance<1000){Dystans.setText(String.valueOf(Math.round(((distance)*1000d)/1000d)) + " m");}
                     else if(distance>1000 && distance!=0) {Dystans.setText(String.valueOf(Math.round(((distance/1000)*1000d)/1000d)) + " km");}
 
 
