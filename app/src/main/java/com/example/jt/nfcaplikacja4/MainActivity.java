@@ -122,6 +122,8 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         final Button START = (Button) findViewById(R.id.PRZYCISK_START);
         final Button STOP = (Button) findViewById(R.id.PRZYCISK_STOP);
         final Chronometer chrono = (Chronometer) findViewById(R.id.chronometer);
+        TextView PREDKOSC = (TextView) findViewById(R.id.textView32);
+        TextView WYSOKOSCTERENU = (TextView) findViewById(R.id.textView29);
         LocationManager locationManager;
 
         image = (ImageView) findViewById(R.id.image);
@@ -236,6 +238,11 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                 Dystans.setText(String.valueOf("0 m"));
                 b = 0;
                 j = 0;
+                TextView PREDKOSC = (TextView) findViewById(R.id.textView32);
+                TextView WYSOKOSCTERENU = (TextView) findViewById(R.id.textView29);
+
+                PREDKOSC.setText(String.valueOf("0 km/h"));
+                WYSOKOSCTERENU.setText(String.valueOf("-"));
 
             }
         });
@@ -764,6 +771,8 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         final Button START = (Button) findViewById(R.id.PRZYCISK_START);
         final Button STOP = (Button) findViewById(R.id.PRZYCISK_STOP);
         final Chronometer chrono = (Chronometer) findViewById(R.id.chronometer);
+        TextView PREDKOSC = (TextView) findViewById(R.id.textView32);
+        TextView WYSOKOSCTERENU = (TextView) findViewById(R.id.textView29);
 
         STOP.setEnabled(false);
         START.setEnabled(true);
@@ -771,6 +780,8 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         chrono.stop();
         chrono.setBase(SystemClock.elapsedRealtime());
         j = 0;
+        PREDKOSC.setText(String.valueOf("0 km/h"));
+        WYSOKOSCTERENU.setText(String.valueOf("-"));
 
         edt.setOnClickListener(new View.OnClickListener() {
             @Override
