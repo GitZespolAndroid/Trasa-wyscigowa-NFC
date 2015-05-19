@@ -63,6 +63,25 @@
         android:layout_alignTop="@+id/textView"
         android:layout_toEndOf="@+id/textView" />
 
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Przebiegnięty dystans:"
+        android:id="@+id/textView26"
+        android:layout_marginRight="3sp"
+        android:layout_marginLeft="5sp"
+        android:layout_below="@+id/textView"
+        android:layout_alignParentStart="true" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="0 m"
+        android:id="@+id/textView27"
+        android:layout_marginRight="3sp"
+        android:layout_alignTop="@+id/textView26"
+        android:layout_toEndOf="@+id/textView26" />
+
 
 </RelativeLayout>
 

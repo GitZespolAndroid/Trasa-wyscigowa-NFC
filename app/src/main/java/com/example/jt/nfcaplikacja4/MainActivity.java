@@ -85,7 +85,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
     double lng;
     LatLng bdTest;
     LatLng bdTest1;
-    TextView LAT;
+    TextView LAT, Dystans;
     TextView LNG, SPEED, ACCURACY, LENGHT, DATA;
     private NavigationDrawerFragment mNavigationDrawerFragment;
     private CharSequence mTitle;
@@ -94,7 +94,8 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
     Button buttonUp;
     TextView textFolder;
     ImageView image;
-    int o = 0;
+    int o,b = 0;
+    float distance;
 
     String KEY_TEXTPSS = "TEXTPSS";
     static final int CUSTOM_DIALOG_ID = 0;
@@ -120,24 +121,15 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
         final Button START = (Button) findViewById(R.id.PRZYCISK_START);
         final Button STOP = (Button) findViewById(R.id.PRZYCISK_STOP);
-        final Button WCZYTAJTRASE = (Button) findViewById(R.id.button);
         final Chronometer chrono = (Chronometer) findViewById(R.id.chronometer);
         LocationManager locationManager;
 
         image = (ImageView) findViewById(R.id.image);
 
         buttonOpenDialog = (Button) findViewById(R.id.button);
-        buttonOpenDialog.setOnClickListener(new Button.OnClickListener() {
-
-            @Override
-            public void onClick(View arg0) {
-                showDialog(CUSTOM_DIALOG_ID);
-            }
-        });
 
         root = new File("/");
         curFolder = root;
-
 
 
 
@@ -220,7 +212,8 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                 // Perform action on click
                 START.setEnabled(false);
                 STOP.setEnabled(true);
-                WCZYTAJTRASE.setEnabled(false);
+                buttonOpenDialog .setEnabled(false);
+                distance = 0;
             }
         });
 
@@ -230,7 +223,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                 // Perform action on click
                 START.setEnabled(true);
                 STOP.setEnabled(false);
-                WCZYTAJTRASE.setEnabled(true);
+                buttonOpenDialog .setEnabled(true);
 
                 for (m = 0; m < 6; m++) {
                     TABLICA2[m] = "";
@@ -239,16 +232,22 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                 mTextView.setText("Zbliż do nalepki startowej");
                 chrono.stop();
                 chrono.setBase(SystemClock.elapsedRealtime());
+                distance = 0;
+                b = 0;
             }
         });
 
         //OBLUGA PRZYCISKU "WCZYTAJ TRASE"
 
 
+        buttonOpenDialog = (Button) findViewById(R.id.button);
+        buttonOpenDialog.setOnClickListener(new Button.OnClickListener() {
 
-
-
-
+            @Override
+            public void onClick(View arg0) {
+                showDialog(CUSTOM_DIALOG_ID);
+            }
+        });
 
     }
 
@@ -486,12 +485,13 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 //  convert the location object to a LatLng object that can be used by the map API
         LatLng currentPosition = new LatLng(lan, lng);
         polylineOptions = new PolylineOptions().width(10).color(Color.RED);
+        Dystans = (TextView) findViewById(R.id.textView27);
 
 // zoom to the current location
 
 // add a marker to the map indicating our current position
 
-        if ((!START.isEnabled() && STOP.isEnabled())) {
+        if ((!START.isEnabled() && STOP.isEnabled()) && b == 1) {
 
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 16));
 
@@ -510,6 +510,26 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                     mMap.addMarker(new MarkerOptions()
                             .position(coordList.get(coordList.size() - 1))
                             .snippet("Lat:" + lan + "Lng:" + lng));
+
+                    for (int l = 0; l<=coordList.size()-1; l++) {
+
+                        Location crntLocation = new Location("crntlocation");
+                        crntLocation.setLatitude(coordList.get(l).latitude);
+                        crntLocation.setLongitude(coordList.get(l).longitude);
+
+                        Location newLocation = new Location("newlocation");
+                        newLocation.setLatitude(coordList.get(l+1).latitude);
+                        newLocation.setLongitude(coordList.get(l+1).longitude);
+
+                        if (l == 0){distance = crntLocation.distanceTo(newLocation);}
+                        else{distance = distance + crntLocation.distanceTo(newLocation); }
+
+                    }
+
+                    if (distance<1000){Dystans.setText(String.valueOf(distance) + " m");}
+                    else if(distance>1000 && distance!=0) {Dystans.setText(String.valueOf(distance/1000) + " km");}
+
+
                 } else if (coordList.size() >= 2) {
 
                     coordList.set(1, coordList.get(0));
@@ -517,6 +537,24 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                     mMap.addMarker(new MarkerOptions()
                             .position(coordList.get(coordList.size() - 1))
                             .snippet("Lat:" + lan + "Lng:" + lng));
+
+                    for (int l = 0; l<=coordList.size()-1; l++) {
+
+                        Location crntLocation = new Location("crntlocation");
+                        crntLocation.setLatitude(coordList.get(l).latitude);
+                        crntLocation.setLongitude(coordList.get(l).longitude);
+
+                        Location newLocation = new Location("newlocation");
+                        newLocation.setLatitude(coordList.get(l+1).latitude);
+                        newLocation.setLongitude(coordList.get(l+1).longitude);
+
+                        if (l == 0){distance = crntLocation.distanceTo(newLocation);}
+                        else{distance = distance + crntLocation.distanceTo(newLocation);}
+
+                    }
+
+                    if (distance<1000){Dystans.setText(String.valueOf(distance) + " m");}
+                    else if(distance>1000 && distance!=0) {Dystans.setText(String.valueOf(distance/1000) + " km");}
 
                 }
             } else if (location.getSpeed() < 0.01) {
@@ -539,6 +577,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
         else if ((START.isEnabled() && !STOP.isEnabled())) {
             coordList.clear();
+            b = 0;
         }
     }
 
@@ -624,6 +663,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         protected void onPostExecute(String result) {
 
             final Chronometer chrono = (Chronometer) findViewById(R.id.chronometer);
+            b = 1;
 
             if (result != null) {
 
@@ -693,8 +733,6 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                             }
                         }
                     }
-
-                mTextView.setText("Odczytana zawartość: " + result);
                 }
                 else {
                     Toast.makeText(MainActivity.this, "Koniec trasy!", Toast.LENGTH_SHORT).show();
@@ -746,6 +784,8 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
+                        Intent intentRunHistory = new Intent(MainActivity.this,RunHistory.class);
+                        startActivity(intentRunHistory);
 
                     }
                 })
@@ -762,14 +802,14 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         new AlertDialog.Builder(this)
                 .setTitle("Najlepszy wynik")
                 .setView(view)
-                .setNeutralButton("PUBLIKUJ WYNIK NA FB", new Dialog.OnClickListener() {
+                .setPositiveButton("OK", new Dialog.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
                     }
                 })
-                .setPositiveButton("OK",  new Dialog.OnClickListener() {
+                .setNeutralButton("PUBLIKUJ WYNIK NA FB", new Dialog.OnClickListener() {
 
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
