@@ -229,11 +229,11 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                     TABLICA2[m] = "";
                 }
 
-                mTextView.setText("Zbliż do nalepki startowej");
                 chrono.stop();
                 chrono.setBase(SystemClock.elapsedRealtime());
                 distance = 0;
                 b = 0;
+
             }
         });
 
@@ -511,7 +511,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                             .position(coordList.get(coordList.size() - 1))
                             .snippet("Lat:" + lan + "Lng:" + lng));
 
-                    for (int l = 0; l<=coordList.size()-1; l++) {
+                    for (int l = 0; l<coordList.size(); l++) {
 
                         Location crntLocation = new Location("crntlocation");
                         crntLocation.setLatitude(coordList.get(l).latitude);
@@ -538,7 +538,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                             .position(coordList.get(coordList.size() - 1))
                             .snippet("Lat:" + lan + "Lng:" + lng));
 
-                    for (int l = 0; l<=coordList.size()-1; l++) {
+                    for (int l = 0; l<coordList.size(); l++) {
 
                         Location crntLocation = new Location("crntlocation");
                         crntLocation.setLatitude(coordList.get(l).latitude);
