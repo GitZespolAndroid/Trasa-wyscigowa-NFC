@@ -754,6 +754,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         final EditText edt = (EditText)view.findViewById(R.id.editText);
         edt.setCursorVisible(false);
         edt.selectAll();
+        distance = 0;
 
         final Button START = (Button) findViewById(R.id.PRZYCISK_START);
         final Button STOP = (Button) findViewById(R.id.PRZYCISK_STOP);
