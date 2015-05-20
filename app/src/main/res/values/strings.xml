@@ -27,5 +27,6 @@
     <string name="title_activity_run_history">RunHistory</string>
     <string name="title_activity_sets">Sets</string>
     <string name="title_activity_kkkk">KKKK</string>
+    <string name="title_activity_end_of_run">EndOfRun</string>
 
 </resources>

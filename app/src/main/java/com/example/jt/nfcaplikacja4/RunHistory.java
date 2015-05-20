@@ -26,7 +26,7 @@ public class RunHistory extends Activity {
     TableLayout table_layout;
     Button build_btn;
     GridLayout lol,lol2,lol3,lol4;
-    TextView tak,tak2,tak3,tak4;
+    TextView tak,tak2,tak3,tak4,tak9;
     ArrayList<String> sInfo = new ArrayList<String>();
     int m = 1;
 

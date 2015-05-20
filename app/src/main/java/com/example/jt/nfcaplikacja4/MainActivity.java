@@ -113,6 +113,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
     long timeInMilliseconds = 0L;
     long timeSwapBuff = 0L;
     long updatedTime = 0L;
+    Intent intent;
 
     // ZMIENNE ZWIĄZANE Z PRZYCISKAMI SĄ DANE ODRĘBNIE W KAŻDEJ Z FUNKCJI I KLAS, PONIEWAŻ W INNYM PRZYPADKU APLIKACJA "WYKRZACZA SIĘ"
 
@@ -790,6 +791,8 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         timeSwapBuff = 0;
         timeInMilliseconds = 0;
         customHandler.removeCallbacks(updateTimerThread);
+
+
         timerValue.setText("000:00:00:000");
         j = 0;
         PREDKOSC.setText(String.valueOf("0 km/h"));
