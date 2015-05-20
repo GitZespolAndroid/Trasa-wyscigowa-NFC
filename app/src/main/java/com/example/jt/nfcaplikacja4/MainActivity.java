@@ -523,7 +523,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         if ((!START.isEnabled() && STOP.isEnabled() && b == 1)) {
 
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 16));
-            PREDKOSC.setText(String.valueOf(Math.round((location.getSpeed() * 1d) / 1d) + " km/h"));
+            PREDKOSC.setText(String.valueOf(Math.round(location.getSpeed() * 1000d) / 1000d + " km/h"));
             WYSOKOSCTERENU.setText(String.valueOf(location.getAltitude() + " m.n.p.m"));
 
             if (coordList.isEmpty()) {
@@ -555,8 +555,8 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
                     }
 
-                    if (distance<1000){Dystans.setText(String.valueOf(Math.round(((distance)*1d)/1d)) + " m");}
-                    else if(distance>1000 && distance!=0) {Dystans.setText(String.valueOf(Math.round(((distance/1000)*1d)/1d))  + " km");}
+                    if (distance<1000){Dystans.setText(String.valueOf(Math.round(distance*1000d)/1000d) + " m");}
+                    else if(distance>1000 && distance!=0) {Dystans.setText(String.valueOf(Math.round((distance/1000)*1000d)/1000d)  + " km");}
 
 
                 } else if (coordList.size() >= 2) {
@@ -580,8 +580,8 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
                     }
 
-                    if (distance<1000){Dystans.setText(String.valueOf(Math.round(((distance)*1d)/1d)) + " m");}
-                    else if(distance>1000 && distance!=0) {Dystans.setText(String.valueOf(Math.round(((distance/1000)*1d)/1d)) + " km");}
+                    if (distance<1000){Dystans.setText(String.valueOf(Math.round(distance*1000d)/1000d) + " m");}
+                    else if(distance>1000 && distance!=0) {Dystans.setText(String.valueOf(Math.round((distance/1000)*1000d)/1000d)  + " km");}
 
 
 
