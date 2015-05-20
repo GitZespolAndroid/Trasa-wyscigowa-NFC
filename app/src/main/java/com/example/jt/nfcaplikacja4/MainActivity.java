@@ -31,7 +31,6 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.nfc.NfcAdapter;
 import android.view.LayoutInflater;
-import android.os.CountDownTimer;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
@@ -39,7 +38,6 @@ import android.view.ViewGroup;
 import android.webkit.MimeTypeMap;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
-import android.widget.Chronometer;
 import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -92,7 +90,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
     Button buttonOpenDialog;
     Button buttonUp;
-    TextView textFolder;
+    TextView textFolder, timerValue;
     ImageView image;
     int o,b = 0;
     float distance;
@@ -108,6 +106,14 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
     private List<String> fileList = new ArrayList<String>();
     private List<String> fileList2 = new ArrayList<String>();
 
+    private long startTime = 0L;
+
+    private Handler customHandler = new Handler();
+
+    long timeInMilliseconds = 0L;
+    long timeSwapBuff = 0L;
+    long updatedTime = 0L;
+
     // ZMIENNE ZWIĄZANE Z PRZYCISKAMI SĄ DANE ODRĘBNIE W KAŻDEJ Z FUNKCJI I KLAS, PONIEWAŻ W INNYM PRZYPADKU APLIKACJA "WYKRZACZA SIĘ"
 
     @Override
@@ -121,9 +127,10 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
         final Button START = (Button) findViewById(R.id.PRZYCISK_START);
         final Button STOP = (Button) findViewById(R.id.PRZYCISK_STOP);
-        final Chronometer chrono = (Chronometer) findViewById(R.id.chronometer);
+
         TextView PREDKOSC = (TextView) findViewById(R.id.textView32);
         TextView WYSOKOSCTERENU = (TextView) findViewById(R.id.textView29);
+        timerValue = (TextView) findViewById(R.id.textView34);
         LocationManager locationManager;
 
         image = (ImageView) findViewById(R.id.image);
@@ -231,8 +238,11 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                     TABLICA2[m] = "";
                 }
 
-                chrono.stop();
-                chrono.setBase(SystemClock.elapsedRealtime());
+                updatedTime=0;
+                timeSwapBuff = 0;
+                timeInMilliseconds = 0;
+                customHandler.removeCallbacks(updateTimerThread);
+                timerValue.setText("000:00:00:000");
                 distance = 0;
                 TextView Dystans = (TextView) findViewById(R.id.textView27);
                 Dystans.setText(String.valueOf("0 m"));
@@ -677,7 +687,6 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         @Override
         protected void onPostExecute(String result) {
 
-            final Chronometer chrono = (Chronometer) findViewById(R.id.chronometer);
             b = 1;
 
             if (result != null) {
@@ -701,8 +710,8 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                             else{
                                 Toast.makeText(MainActivity.this, "Dobra nalepka!", Toast.LENGTH_SHORT).show();
                                 j++;
-                                chrono.setBase(SystemClock.elapsedRealtime());
-                                chrono.start();
+                                startTime = SystemClock.uptimeMillis();
+                                customHandler.postDelayed(updateTimerThread, 0);
                             }
                         }
 
@@ -732,8 +741,8 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                             else{
                                 Toast.makeText(MainActivity.this, "Zła nalepka!", Toast.LENGTH_SHORT).show();
                                 j++;
-                                chrono.setBase(SystemClock.elapsedRealtime());
-                                chrono.start();
+                                startTime = SystemClock.uptimeMillis();
+                                customHandler.postDelayed(updateTimerThread, 0);
                             }
                         }
 
@@ -770,15 +779,18 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
         final Button START = (Button) findViewById(R.id.PRZYCISK_START);
         final Button STOP = (Button) findViewById(R.id.PRZYCISK_STOP);
-        final Chronometer chrono = (Chronometer) findViewById(R.id.chronometer);
         TextView PREDKOSC = (TextView) findViewById(R.id.textView32);
         TextView WYSOKOSCTERENU = (TextView) findViewById(R.id.textView29);
+        timerValue = (TextView) findViewById(R.id.textView34);
 
         STOP.setEnabled(false);
         START.setEnabled(true);
 
-        chrono.stop();
-        chrono.setBase(SystemClock.elapsedRealtime());
+        updatedTime=0;
+        timeSwapBuff = 0;
+        timeInMilliseconds = 0;
+        customHandler.removeCallbacks(updateTimerThread);
+        timerValue.setText("000:00:00:000");
         j = 0;
         PREDKOSC.setText(String.valueOf("0 km/h"));
         WYSOKOSCTERENU.setText(String.valueOf("-"));
@@ -1039,6 +1051,29 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
             }
 
         }
+    };
+
+    //------------------------FUNKCJA REALIZUJĄCA STOPER:-------------------------------------------
+
+    private Runnable updateTimerThread = new Runnable() {
+
+        public void run() {
+
+            timeInMilliseconds = SystemClock.uptimeMillis() - startTime;
+
+            updatedTime = timeSwapBuff + timeInMilliseconds;
+
+            int secs = (int) (updatedTime / 1000);
+            int mins = secs / 60;
+            int hours = mins / 60;
+            secs = secs % 60;
+            int milliseconds = (int) (updatedTime % 1000);
+            timerValue.setText(String.format("%03d", hours) + ":" + String.format("%02d", mins) + ":"
+                    + String.format("%02d", secs) + ":"
+                    + String.format("%03d", milliseconds));
+            customHandler.postDelayed(this, 0);
+        }
+
     };
 
 }
