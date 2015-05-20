@@ -1,6 +1,7 @@
 package com.example.jt.nfcaplikacja4;
 
 import android.app.Activity;
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.ActivityInfo;
 import android.preference.PreferenceManager;
@@ -29,7 +30,6 @@ public class RunHistory extends Activity {
     TextView tak,tak2,tak3,tak4,tak9;
     ArrayList<String> sInfo = new ArrayList<String>();
     int m = 1;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

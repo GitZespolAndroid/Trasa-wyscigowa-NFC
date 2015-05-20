@@ -113,7 +113,8 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
     long timeInMilliseconds = 0L;
     long timeSwapBuff = 0L;
     long updatedTime = 0L;
-    Intent intent;
+
+    Intent intent3;
 
     // ZMIENNE ZWIĄZANE Z PRZYCISKAMI SĄ DANE ODRĘBNIE W KAŻDEJ Z FUNKCJI I KLAS, PONIEWAŻ W INNYM PRZYPADKU APLIKACJA "WYKRZACZA SIĘ"
 
@@ -140,6 +141,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
         root = new File("/");
         curFolder = root;
+
 
 
 
@@ -224,6 +226,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                 STOP.setEnabled(true);
                 buttonOpenDialog .setEnabled(false);
                 distance = 0;
+
             }
         });
 
@@ -290,8 +293,9 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
             case 2:
 
-                Intent intent2 = new Intent(this,RunHistory.class);
+                Intent intent2 = new Intent(MainActivity.this,RunHistory.class);
                 startActivity(intent2);
+
                 break;
 
             case 3:
@@ -301,7 +305,6 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
             break;
             case 4:
 
-                Intent intent3 = new Intent(this,Sets.class);
                 startActivity(intent3);
                 break;
 
@@ -520,7 +523,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         if ((!START.isEnabled() && STOP.isEnabled() && b == 1)) {
 
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 16));
-            PREDKOSC.setText(String.valueOf(Math.round((location.getSpeed() * 100d) / 100d) + " km/h"));
+            PREDKOSC.setText(String.valueOf(Math.round((location.getSpeed() * 1d) / 1d) + " km/h"));
             WYSOKOSCTERENU.setText(String.valueOf(location.getAltitude() + " m.n.p.m"));
 
             if (coordList.isEmpty()) {
@@ -552,8 +555,8 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
                     }
 
-                    if (distance<1000){Dystans.setText(String.valueOf(Math.round(((distance)*10d)/10d)) + " m");}
-                    else if(distance>1000 && distance!=0) {Dystans.setText(String.valueOf(Math.round(((distance/1000)*1000d)/1000d))  + " km");}
+                    if (distance<1000){Dystans.setText(String.valueOf(Math.round(((distance)*1d)/1d)) + " m");}
+                    else if(distance>1000 && distance!=0) {Dystans.setText(String.valueOf(Math.round(((distance/1000)*1d)/1d))  + " km");}
 
 
                 } else if (coordList.size() >= 2) {
@@ -577,8 +580,8 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
                     }
 
-                    if (distance<1000){Dystans.setText(String.valueOf(Math.round(((distance)*10d)/10d)) + " m");}
-                    else if(distance>1000 && distance!=0) {Dystans.setText(String.valueOf(Math.round(((distance/1000)*1000d)/1000d)) + " km");}
+                    if (distance<1000){Dystans.setText(String.valueOf(Math.round(((distance)*1d)/1d)) + " m");}
+                    else if(distance>1000 && distance!=0) {Dystans.setText(String.valueOf(Math.round(((distance/1000)*1d)/1d)) + " km");}
 
 
 
