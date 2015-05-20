@@ -786,6 +786,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
         STOP.setEnabled(false);
         START.setEnabled(true);
+        buttonOpenDialog.setEnabled(true);
 
         updatedTime=0;
         timeSwapBuff = 0;
