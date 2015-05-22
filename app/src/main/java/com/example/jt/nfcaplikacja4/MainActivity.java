@@ -796,6 +796,9 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         timeInMilliseconds = 0;
         customHandler.removeCallbacks(updateTimerThread);
 
+        TextView textView =(TextView)view.findViewById(R.id.textView2);
+        textView.setText("Twój czas wynosi:  "+ timerValue.getText());
+
 
         timerValue.setText("000:00:00:000");
         j = 0;
