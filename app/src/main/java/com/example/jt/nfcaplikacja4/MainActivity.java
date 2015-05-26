@@ -81,8 +81,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
     public static final String MIME_TEXT_PLAIN = "text/plain";
     public static final String TAG = "NfcDemo";
     int i = 0;
-    String[] TABLICA1 = {"1","2","3","4","5","nn"};
-    String[] TABLICA2 = {"","","","","",""};
+
     int j,m,z,v = 0;
     long time = 0;
     GoogleMap mMap;
@@ -132,6 +131,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
     ArrayList<String> Wspolrzedna2 = new ArrayList<String>();
     ArrayList<String> mmm7 = new ArrayList<String>();
     ArrayList<String> Lista = new ArrayList<String>();
+    ArrayList<String> KoloryKolek = new ArrayList<String>();
     List<Circle> Circles = new ArrayList<Circle>();
 
 
@@ -259,6 +259,8 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                             .radius(20)
                             .strokeColor(Color.BLACK)
                             .fillColor(Color.GRAY));
+
+                KoloryKolek.set(i,"0");
                 }
 
                 LatLng currentPosition = new LatLng(lan, lng);
@@ -570,13 +572,37 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
             // narazie działa jedynie gdy porpawnie biegniemy (wersja do dopracowania)
 
-            for (int i = j; i<NumerNalepki.size(); i++){
+            for (int i = 0; i<NumerNalepki.size(); i++){
 
-            mMap.addCircle(new CircleOptions()
-                        .center(new LatLng(Double.valueOf(Wspolrzedna1.get(i)), Double.valueOf(Wspolrzedna2.get(i))))
-                        .radius(20)
-                        .strokeColor(Color.BLACK)
-                        .fillColor(Color.GRAY));
+                if (KoloryKolek.get(i).equals("0")){
+
+                    mMap.addCircle(new CircleOptions()
+                            .center(new LatLng(Double.valueOf(Wspolrzedna1.get(i)), Double.valueOf(Wspolrzedna2.get(i))))
+                            .radius(20)
+                            .strokeColor(Color.BLACK)
+                            .fillColor(Color.GRAY));
+
+                }
+
+                else if (KoloryKolek.get(i).equals("1")){
+
+                    mMap.addCircle(new CircleOptions()
+                            .center(new LatLng(Double.valueOf(Wspolrzedna1.get(i)), Double.valueOf(Wspolrzedna2.get(i))))
+                            .radius(20)
+                            .strokeColor(Color.BLACK)
+                            .fillColor(Color.GREEN));
+
+                }
+
+                else if (KoloryKolek.get(i).equals("2")){
+
+                    mMap.addCircle(new CircleOptions()
+                            .center(new LatLng(Double.valueOf(Wspolrzedna1.get(i)), Double.valueOf(Wspolrzedna2.get(i))))
+                            .radius(20)
+                            .strokeColor(Color.BLACK)
+                            .fillColor(Color.RED));
+
+                }
 
             }
 
@@ -712,11 +738,36 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
             for (int i = 0; i<NumerNalepki.size(); i++){
 
-                mMap.addCircle(new CircleOptions()
-                        .center(new LatLng(Double.valueOf(Wspolrzedna1.get(i)), Double.valueOf(Wspolrzedna2.get(i))))
-                        .radius(20)
-                        .strokeColor(Color.BLACK)
-                        .fillColor(Color.GRAY));
+                if (KoloryKolek.get(i).equals("0")){
+
+                    mMap.addCircle(new CircleOptions()
+                            .center(new LatLng(Double.valueOf(Wspolrzedna1.get(i)), Double.valueOf(Wspolrzedna2.get(i))))
+                            .radius(20)
+                            .strokeColor(Color.BLACK)
+                            .fillColor(Color.GRAY));
+
+                }
+
+                else if (KoloryKolek.get(i).equals("1")){
+
+                    mMap.addCircle(new CircleOptions()
+                            .center(new LatLng(Double.valueOf(Wspolrzedna1.get(i)), Double.valueOf(Wspolrzedna2.get(i))))
+                            .radius(20)
+                            .strokeColor(Color.BLACK)
+                            .fillColor(Color.GREEN));
+
+                }
+
+                else if (KoloryKolek.get(i).equals("2")){
+
+                    mMap.addCircle(new CircleOptions()
+                            .center(new LatLng(Double.valueOf(Wspolrzedna1.get(i)), Double.valueOf(Wspolrzedna2.get(i))))
+                            .radius(20)
+                            .strokeColor(Color.BLACK)
+                            .fillColor(Color.RED));
+
+                }
+
             }
 
             mMap.addMarker(new MarkerOptions()
@@ -830,17 +881,18 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                                 else{
                                     Toast.makeText(MainActivity.this, "Dobra nalepka!", Toast.LENGTH_SHORT).show();
 
+                                    KoloryKolek.set(j,"1");
+
+                                    TextView Nalepki = (TextView) findViewById(R.id.textView33);
+                                    Nalepki.setText(String.valueOf(j+1)+"/"+String.valueOf(NumerNalepki.size()));
+                                    Log.i("Instance state", "Zielone");
+
                                     mMap.addCircle(new CircleOptions()
                                             .center(new LatLng(Double.valueOf(Wspolrzedna1.get(j)), Double.valueOf(Wspolrzedna2.get(j))))
                                             .radius(20)
                                             .strokeColor(Color.BLACK)
                                             .fillColor(Color.GREEN));
 
-                                    Circles.add(circle);
-
-                                    TextView Nalepki = (TextView) findViewById(R.id.textView33);
-                                    Nalepki.setText(String.valueOf(j+1)+"/"+String.valueOf(NumerNalepki.size()));
-                                    Log.i("Instance state", "Zielone");
 
                                     j++;
                                     dobrenalepki++;
@@ -848,17 +900,19 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                             }
                             else{
                                 Toast.makeText(MainActivity.this, "Dobra nalepka!", Toast.LENGTH_SHORT).show();
-                                 mMap.addCircle(new CircleOptions()
+
+                                KoloryKolek.set(j,"1");
+
+                                TextView Nalepki = (TextView) findViewById(R.id.textView33);
+                                Nalepki.setText(String.valueOf(j+1)+"/"+String.valueOf(NumerNalepki.size()));
+                                Log.i("Instance state", "Zielone");
+
+                                mMap.addCircle(new CircleOptions()
                                         .center(new LatLng(Double.valueOf(Wspolrzedna1.get(j)), Double.valueOf(Wspolrzedna2.get(j))))
                                         .radius(20)
                                         .strokeColor(Color.BLACK)
                                         .fillColor(Color.GREEN));
 
-                                Circles.add(circle);
-
-                                TextView Nalepki = (TextView) findViewById(R.id.textView33);
-                                Nalepki.setText(String.valueOf(j+1)+"/"+String.valueOf(NumerNalepki.size()));
-                                Log.i("Instance state", "Zielone");
 
                                 j++;
                                 dobrenalepki++;
@@ -874,18 +928,20 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                             }
                             else{
                                 Toast.makeText(MainActivity.this, "Dobra nalepka! Koniec trasy!", Toast.LENGTH_SHORT).show();
+
+                                KoloryKolek.set(j,"1");
+
+                                Log.i("Instance state", "Zielone");
+
+                                TextView Nalepki = (TextView) findViewById(R.id.textView33);
+                                Nalepki.setText(String.valueOf(j+1)+"/"+String.valueOf(NumerNalepki.size()));
+
                                 mMap.addCircle(new CircleOptions()
                                         .center(new LatLng(Double.valueOf(Wspolrzedna1.get(j)), Double.valueOf(Wspolrzedna2.get(j))))
                                         .radius(20)
                                         .strokeColor(Color.BLACK)
                                         .fillColor(Color.GREEN));
 
-                                Log.i("Instance state", "Zielone");
-
-                                Circles.add(circle);
-
-                                TextView Nalepki = (TextView) findViewById(R.id.textView33);
-                                Nalepki.setText(String.valueOf(j+1)+"/"+String.valueOf(NumerNalepki.size()));
 
                                 j++;
                                 dobrenalepki++;
@@ -902,17 +958,18 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                                 }
                                 else{
                                     Toast.makeText(MainActivity.this, "Zła nalepka!", Toast.LENGTH_SHORT).show();
+
+                                    KoloryKolek.set(Integer.valueOf(result)-1,"2");
+
+                                    TextView Nalepki = (TextView) findViewById(R.id.textView33);
+                                    Nalepki.setText(String.valueOf(j+1)+"/"+String.valueOf(NumerNalepki.size()));
+                                    Log.i("Instance state", "Czerwone");
+
                                     mMap.addCircle(new CircleOptions()
                                             .center(new LatLng(Double.valueOf(Wspolrzedna1.get(Integer.valueOf(result)-1)), Double.valueOf(Wspolrzedna2.get(Integer.valueOf(result)-1))))
                                             .radius(20)
                                             .strokeColor(Color.BLACK)
                                             .fillColor(Color.RED));
-
-                                    Circles.add(circle);
-
-                                    TextView Nalepki = (TextView) findViewById(R.id.textView33);
-                                    Nalepki.setText(String.valueOf(j+1)+"/"+String.valueOf(NumerNalepki.size()));
-                                    Log.i("Instance state", "Czerwone");
 
                                     j++;
                                     zlenalepki++;
@@ -921,17 +978,17 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                             else{
                                 Toast.makeText(MainActivity.this, "Zła nalepka!", Toast.LENGTH_SHORT).show();
 
+                                KoloryKolek.set(Integer.valueOf(result)-1,"2");
+
+                                TextView Nalepki = (TextView) findViewById(R.id.textView33);
+                                Nalepki.setText(String.valueOf(j+1)+"/"+String.valueOf(NumerNalepki.size()));
+                                Log.i("Instance state", "Czerwone");
+
                                 mMap.addCircle(new CircleOptions()
                                         .center(new LatLng(Double.valueOf(Wspolrzedna1.get(Integer.valueOf(result)-1)), Double.valueOf(Wspolrzedna2.get(Integer.valueOf(result)-1))))
                                         .radius(20)
                                         .strokeColor(Color.BLACK)
                                         .fillColor(Color.RED));
-
-                                Circles.add(circle);
-
-                                TextView Nalepki = (TextView) findViewById(R.id.textView33);
-                                Nalepki.setText(String.valueOf(j+1)+"/"+String.valueOf(NumerNalepki.size()));
-                                Log.i("Instance state", "Czerwone");
 
                                 j++;
                                 zlenalepki++;
@@ -948,13 +1005,14 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                             else{
                                 Toast.makeText(MainActivity.this, "Zła nalepka! Koniec trasy!", Toast.LENGTH_SHORT).show();
 
+
+                                KoloryKolek.set(Integer.valueOf(result)-1,"2");
+
                                 mMap.addCircle(new CircleOptions()
-                                        .center(new LatLng(Double.parseDouble(Wspolrzedna1.get(Integer.valueOf(result)-1)), Double.parseDouble(Wspolrzedna2.get(Integer.valueOf(result)-1))))
+                                        .center(new LatLng(Double.valueOf(Wspolrzedna1.get(Integer.valueOf(result)-1)), Double.valueOf(Wspolrzedna2.get(Integer.valueOf(result)-1))))
                                         .radius(20)
                                         .strokeColor(Color.BLACK)
                                         .fillColor(Color.RED));
-
-                                Circles.add(circle);
 
                                 TextView Nalepki = (TextView) findViewById(R.id.textView33);
                                 Nalepki.setText(String.valueOf(j+1)+"/"+String.valueOf(NumerNalepki.size()));
@@ -1435,6 +1493,8 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                     .radius(20)
                     .strokeColor(Color.BLACK)
                     .fillColor(Color.GRAY));
+
+        KoloryKolek.add("0");
 
         }
     }
