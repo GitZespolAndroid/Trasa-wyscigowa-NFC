@@ -1,6 +1,9 @@
 package com.example.jt.nfcaplikacja4;
 
+import java.io.BufferedReader;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -55,12 +58,18 @@ import android.os.AsyncTask;
 import android.widget.TextView;
 import android.widget.Button;
 
+import com.google.android.gms.maps.CameraUpdate;
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
+import com.google.android.gms.maps.model.Circle;
+import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.android.gms.maps.model.PolylineOptions;
+
+import org.w3c.dom.Text;
 
 public class MainActivity extends ActionBarActivity implements LocationListener, NavigationDrawerFragment.NavigationDrawerCallbacks {
 
@@ -74,7 +83,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
     int i = 0;
     String[] TABLICA1 = {"1","2","3","4","5","nn"};
     String[] TABLICA2 = {"","","","","",""};
-    int j,m = 0;
+    int j,m,z,v = 0;
     long time = 0;
     GoogleMap mMap;
     PolylineOptions polylineOptions;
@@ -92,7 +101,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
     Button buttonUp;
     TextView textFolder, timerValue;
     ImageView image;
-    int o,b = 0;
+    int o,b,zlenalepki,dobrenalepki = 0;
     float distance;
 
     String KEY_TEXTPSS = "TEXTPSS";
@@ -115,6 +124,17 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
     long updatedTime = 0L;
 
     Intent intent3;
+
+    Circle circle = null;
+
+    ArrayList<String> NumerNalepki = new ArrayList<String>();
+    ArrayList<String> Wspolrzedna1 = new ArrayList<String>();
+    ArrayList<String> Wspolrzedna2 = new ArrayList<String>();
+    ArrayList<String> mmm7 = new ArrayList<String>();
+    ArrayList<String> Lista = new ArrayList<String>();
+    List<Circle> Circles = new ArrayList<Circle>();
+
+
 
     // ZMIENNE ZWIĄZANE Z PRZYCISKAMI SĄ DANE ODRĘBNIE W KAŻDEJ Z FUNKCJI I KLAS, PONIEWAŻ W INNYM PRZYPADKU APLIKACJA "WYKRZACZA SIĘ"
 
@@ -166,8 +186,6 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
 // request that the provider send this activity GPS updates every 20 seconds
         locationManager.requestLocationUpdates(provider, 2000, 0, this);
-
-        //-------------------------------------------------------------------------------------
 
 
         //-------------------OBIEKTY DO ROZWIJANEGO PO LEWO MENU-------------------------------
@@ -226,6 +244,27 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                 STOP.setEnabled(true);
                 buttonOpenDialog .setEnabled(false);
                 distance = 0;
+                z = 0;
+                Lista.clear();
+                coordList.clear();
+
+                TextView Nalepki = (TextView) findViewById(R.id.textView33);
+                Nalepki.setText("0/"+String.valueOf(NumerNalepki.size()));
+                mMap.clear();
+
+                for (int i = 0; i<NumerNalepki.size(); i++){
+
+                 mMap.addCircle(new CircleOptions()
+                            .center(new LatLng(Double.valueOf(Wspolrzedna1.get(i)), Double.valueOf(Wspolrzedna2.get(i))))
+                            .radius(20)
+                            .strokeColor(Color.BLACK)
+                            .fillColor(Color.GRAY));
+                }
+
+                LatLng currentPosition = new LatLng(lan, lng);
+                mMap.addMarker(new MarkerOptions()
+                        .position(currentPosition)
+                        .snippet("Lat:" + lan + "Lng:" + lng));
 
             }
         });
@@ -238,10 +277,9 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                 STOP.setEnabled(false);
                 buttonOpenDialog .setEnabled(true);
 
-                for (m = 0; m < 6; m++) {
-                    TABLICA2[m] = "";
-                }
-
+                Lista.clear();
+                dobrenalepki = 0;
+                zlenalepki = 0;
                 updatedTime=0;
                 timeSwapBuff = 0;
                 timeInMilliseconds = 0;
@@ -254,7 +292,6 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                 j = 0;
                 TextView PREDKOSC = (TextView) findViewById(R.id.textView32);
                 TextView WYSOKOSCTERENU = (TextView) findViewById(R.id.textView29);
-
                 PREDKOSC.setText(String.valueOf("0 km/h"));
                 WYSOKOSCTERENU.setText(String.valueOf("-"));
 
@@ -263,13 +300,13 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
         //OBLUGA PRZYCISKU "WCZYTAJ TRASE"
 
-
         buttonOpenDialog = (Button) findViewById(R.id.button);
         buttonOpenDialog.setOnClickListener(new Button.OnClickListener() {
 
             @Override
             public void onClick(View arg0) {
                 showDialog(CUSTOM_DIALOG_ID);
+                coordList.clear();
             }
         });
 
@@ -303,8 +340,10 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                 Highscore();
 
             break;
+
             case 4:
 
+                Intent intent3 = new Intent(this,Sets.class);
                 startActivity(intent3);
                 break;
 
@@ -498,11 +537,10 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
     // OBSŁUGA MAPY (RYSOWANIE KURSORA I SLADU BIEGU NA MAPIE)
 
     private void drawMarker(Location location) {
-        mMap.clear();
+
         lan = Math.round(location.getLatitude() * 100000d) / 100000d;
         lng = Math.round(location.getLongitude() * 100000d) / 100000d;
         int p = 0;
-        int j = 0;
         final Button START = (Button) findViewById(R.id.PRZYCISK_START);
         final Button STOP = (Button) findViewById(R.id.PRZYCISK_STOP);
 
@@ -516,97 +554,175 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         TextView PREDKOSC = (TextView) findViewById(R.id.textView32);
         TextView WYSOKOSCTERENU = (TextView) findViewById(R.id.textView29);
 
-// zoom to the current location
-
 // add a marker to the map indicating our current position
 
-        if ((!START.isEnabled() && STOP.isEnabled() && b == 1)) {
+        if ((!START.isEnabled() && STOP.isEnabled())) {
+
+            mMap.clear();
+
+            if (b==0) {
+
+                mMap.addMarker(new MarkerOptions()
+                        .position(currentPosition)
+                        .snippet("Lat:" + lan + "Lng:" + lng));
+
+            }
+
+            for (int i = j; i<NumerNalepki.size(); i++){
+
+            mMap.addCircle(new CircleOptions()
+                        .center(new LatLng(Double.valueOf(Wspolrzedna1.get(i)), Double.valueOf(Wspolrzedna2.get(i))))
+                        .radius(20)
+                        .strokeColor(Color.BLACK)
+                        .fillColor(Color.GRAY));
+
+            }
 
             mMap.animateCamera(CameraUpdateFactory.newLatLngZoom(currentPosition, 16));
             PREDKOSC.setText(String.valueOf(Math.round(location.getSpeed() * 1000d) / 1000d + " km/h"));
             WYSOKOSCTERENU.setText(String.valueOf(location.getAltitude() + " m.n.p.m"));
 
-            if (coordList.isEmpty()) {
-                coordList.add(new LatLng(lan, lng));
-                mMap.addMarker(new MarkerOptions()
-                        .position(currentPosition)
-                        .snippet("Lat:" + lan + "Lng:" + lng));
-            } else if (location.getSpeed() >= 0.01) {
-                coordList.add(new LatLng(lan, lng));
+            if (b == 1) {
 
-                if (coordList.size() > 2 && p == 1) {
-
-                    p = 0;
-                    coordList.set(coordList.size() - 1, coordList.get(coordList.size() - 2));
-                    mMap.addMarker(new MarkerOptions()
-                            .position(coordList.get(coordList.size() - 1))
-                            .snippet("Lat:" + lan + "Lng:" + lng));
-
-                    for (int l = 0; l<coordList.size()-1; l++) {
-
-                        crntLocation.setLatitude(coordList.get(l).latitude);
-                        crntLocation.setLongitude(coordList.get(l).longitude);
-
-                        newLocation.setLatitude(coordList.get(l+1).latitude);
-                        newLocation.setLongitude(coordList.get(l+1).longitude);
-
-                        if (l == 0){distance = crntLocation.distanceTo(newLocation);}
-                        else{distance = distance + crntLocation.distanceTo(newLocation); }
-
-                    }
-
-                    if (distance<1000){Dystans.setText(String.valueOf(Math.round(distance*1000d)/1000d) + " m");}
-                    else if(distance>1000 && distance!=0) {Dystans.setText(String.valueOf(Math.round((distance/1000)*1000d)/1000d)  + " km");}
-
-
-                } else if (coordList.size() >= 2) {
-
-                    coordList.set(1, coordList.get(0));
-                    mMap.addPolyline(polylineOptions.addAll(coordList));
-                    mMap.addMarker(new MarkerOptions()
-                            .position(coordList.get(coordList.size() - 1))
-                            .snippet("Lat:" + lan + "Lng:" + lng));
-
-                    for (int l = 0; l<coordList.size()-1; l++) {
-
-                        crntLocation.setLatitude(coordList.get(l).latitude);
-                        crntLocation.setLongitude(coordList.get(l).longitude);
-
-                        newLocation.setLatitude(coordList.get(l+1).latitude);
-                        newLocation.setLongitude(coordList.get(l+1).longitude);
-
-                        if (l == 0){distance = crntLocation.distanceTo(newLocation);}
-                        else{distance = distance + crntLocation.distanceTo(newLocation);}
-
-                    }
-
-                    if (distance<1000){Dystans.setText(String.valueOf(Math.round(distance*1000d)/1000d) + " m");}
-                    else if(distance>1000 && distance!=0) {Dystans.setText(String.valueOf(Math.round((distance/1000)*1000d)/1000d)  + " km");}
-
-
-
-                }
-            } else if (location.getSpeed() < 0.01) {
-
-                p = 1;
-                mMap.addPolyline(polylineOptions.addAll(coordList));
-
-                if (coordList.size() == 1) {
+                if (coordList.isEmpty()) {
+                    coordList.add(new LatLng(lan, lng));
                     mMap.addMarker(new MarkerOptions()
                             .position(currentPosition)
                             .snippet("Lat:" + lan + "Lng:" + lng));
-                } else if (coordList.size() > 1) {
 
-                    mMap.addMarker(new MarkerOptions()
-                            .position(coordList.get(coordList.size() - 1))
-                            .snippet("Lat:" + lan + "Lng:" + lng));
+                } else if (location.getSpeed() >= 0.01) {
+                    coordList.add(new LatLng(lan, lng));
+
+                    if (coordList.size() > 2 && p == 1) {
+
+                        p = 0;
+                        coordList.set(coordList.size() - 1, coordList.get(coordList.size() - 2));
+
+                        mMap.addMarker(new MarkerOptions()
+                                .position(coordList.get(coordList.size() - 1))
+                                .snippet("Lat:" + lan + "Lng:" + lng));
+
+                        for (int l = 0; l < coordList.size() - 1; l++) {
+
+                            crntLocation.setLatitude(coordList.get(l).latitude);
+                            crntLocation.setLongitude(coordList.get(l).longitude);
+
+                            newLocation.setLatitude(coordList.get(l + 1).latitude);
+                            newLocation.setLongitude(coordList.get(l + 1).longitude);
+
+                            if (l == 0) {
+                                distance = crntLocation.distanceTo(newLocation);
+                            } else {
+                                distance = distance + crntLocation.distanceTo(newLocation);
+                            }
+                        }
+
+                        if (distance < 1000) {
+                            Dystans.setText(String.valueOf(Math.round(distance * 100d) / 100d) + " m");
+                        } else if (distance > 1000 && distance != 0) {
+                            Dystans.setText(String.valueOf(Math.round((distance / 1000) * 1000d) / 1000d) + " km");
+                        }
+
+                    } else if (coordList.size() >= 2) {
+
+                        coordList.set(1, coordList.get(0));
+                        mMap.addPolyline(polylineOptions.addAll(coordList));
+                        mMap.addMarker(new MarkerOptions()
+                                .position(coordList.get(coordList.size() - 1))
+                                .snippet("Lat:" + lan + "Lng:" + lng));
+
+                        for (int l = 0; l < coordList.size() - 1; l++) {
+
+                            crntLocation.setLatitude(coordList.get(l).latitude);
+                            crntLocation.setLongitude(coordList.get(l).longitude);
+
+                            newLocation.setLatitude(coordList.get(l + 1).latitude);
+                            newLocation.setLongitude(coordList.get(l + 1).longitude);
+
+                            if (l == 0) {
+                                distance = crntLocation.distanceTo(newLocation);
+                            } else {
+                                distance = distance + crntLocation.distanceTo(newLocation);
+                            }
+                        }
+
+                        if (distance < 1000) {
+                            Dystans.setText(String.valueOf(Math.round(distance * 100d) / 100d) + " m");
+                        } else if (distance > 1000 && distance != 0) {
+                            Dystans.setText(String.valueOf(Math.round((distance / 1000) * 1000d) / 1000d) + " km");
+                        }
+
+                    }
+
+                    else if (coordList.size() == 1) {
+
+                        mMap.addMarker(new MarkerOptions()
+                                .position(currentPosition)
+                                .snippet("Lat:" + lan + "Lng:" + lng));
+
+                        if (distance < 1000) {
+                            Dystans.setText(String.valueOf(Math.round(distance * 100d) / 100d) + " m");
+                        } else if (distance > 1000 && distance != 0) {
+                            Dystans.setText(String.valueOf(Math.round((distance / 1000) * 1000d) / 1000d) + " km");
+                        }
+
+
+                    } else if (coordList.size() > 1) {
+
+                        mMap.addMarker(new MarkerOptions()
+                                .position(coordList.get(coordList.size() - 1))
+                                .snippet("Lat:" + lan + "Lng:" + lng));
+
+                        if (distance < 1000) {
+                            Dystans.setText(String.valueOf(Math.round(distance * 100d) / 100d) + " m");
+                        } else if (distance > 1000 && distance != 0) {
+                            Dystans.setText(String.valueOf(Math.round((distance / 1000) * 1000d) / 1000d) + " km");
+                        }
+                    }
+
+                } else if (location.getSpeed() < 0.01) {
+
+                    p = 1;
+                    mMap.addPolyline(polylineOptions.addAll(coordList));
+
+                    if (coordList.size() == 1) {
+
+                        mMap.addMarker(new MarkerOptions()
+                                .position(currentPosition)
+                                .snippet("Lat:" + lan + "Lng:" + lng));
+
+
+                    } else if (coordList.size() > 1) {
+
+                      mMap.addMarker(new MarkerOptions()
+                                .position(coordList.get(coordList.size() - 1))
+                                .snippet("Lat:" + lan + "Lng:" + lng));
+
+                    }
                 }
             }
         }
 
         else if ((START.isEnabled() && !STOP.isEnabled())) {
-            coordList.clear();
             b = 0;
+
+            mMap.clear();
+
+
+            for (int i = 0; i<NumerNalepki.size(); i++){
+
+                mMap.addCircle(new CircleOptions()
+                        .center(new LatLng(Double.valueOf(Wspolrzedna1.get(i)), Double.valueOf(Wspolrzedna2.get(i))))
+                        .radius(20)
+                        .strokeColor(Color.BLACK)
+                        .fillColor(Color.GRAY));
+            }
+
+            mMap.addMarker(new MarkerOptions()
+                    .position(currentPosition)
+                    .snippet("Lat:" + lan + "Lng:" + lng));
+
+            mMap.addPolyline(polylineOptions.addAll(coordList));
         }
     }
 
@@ -693,77 +809,166 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
             b = 1;
 
-            if (result != null) {
+            if (result != null && !START.isEnabled()==true && !STOP.isEnabled()==false) {
 
                 //PIERWSZA PRYMITYWNA TESTOWA WERSJA "LOGIKI" ZWIĄZANEJ ZE SPRAWDZANIEM KOLEJNOSCI ZESKANOWANIA NALEPEK NFC
 
-                if (j < 5){
-                    TABLICA2[j] = result;
+                if (j < NumerNalepki.size()){
 
-                    if (TABLICA1[j].equals(result)){
-                        if (j < 4) {
+                    Lista.add(result);
+
+                    if (NumerNalepki.get(j).equals(result)){
+                        if (j < NumerNalepki.size()-1) {
                             if (j > 0){
-                                if (TABLICA2[j].equals(TABLICA2[j-1])){
+                                if (Lista.get(j).equals(Lista.get(j-1))){
                                     Toast.makeText(MainActivity.this, "Ta sama nalepka! Spróbój jeszcze raz!", Toast.LENGTH_SHORT).show();
+
+                                    Lista.remove(j);
+
                                 }
                                 else{
                                     Toast.makeText(MainActivity.this, "Dobra nalepka!", Toast.LENGTH_SHORT).show();
+
+                                    mMap.addCircle(new CircleOptions()
+                                            .center(new LatLng(Double.valueOf(Wspolrzedna1.get(j)), Double.valueOf(Wspolrzedna2.get(j))))
+                                            .radius(20)
+                                            .strokeColor(Color.BLACK)
+                                            .fillColor(Color.GREEN));
+
+                                    Circles.add(circle);
+
+                                    TextView Nalepki = (TextView) findViewById(R.id.textView33);
+                                    Nalepki.setText(String.valueOf(j+1)+"/"+String.valueOf(NumerNalepki.size()));
+                                    Log.i("Instance state", "Zielone");
+
                                     j++;
+                                    dobrenalepki++;
                                 }
                             }
                             else{
                                 Toast.makeText(MainActivity.this, "Dobra nalepka!", Toast.LENGTH_SHORT).show();
+                                 mMap.addCircle(new CircleOptions()
+                                        .center(new LatLng(Double.valueOf(Wspolrzedna1.get(j)), Double.valueOf(Wspolrzedna2.get(j))))
+                                        .radius(20)
+                                        .strokeColor(Color.BLACK)
+                                        .fillColor(Color.GREEN));
+
+                                Circles.add(circle);
+
+                                TextView Nalepki = (TextView) findViewById(R.id.textView33);
+                                Nalepki.setText(String.valueOf(j+1)+"/"+String.valueOf(NumerNalepki.size()));
+                                Log.i("Instance state", "Zielone");
+
                                 j++;
+                                dobrenalepki++;
                                 startTime = SystemClock.uptimeMillis();
                                 customHandler.postDelayed(updateTimerThread, 0);
                             }
                         }
 
-                        else if (j == 4){
-                            if (TABLICA2[j].equals(TABLICA2[j-1])){
+                        else if (j == NumerNalepki.size()-1){
+                            if (Lista.get(j).equals(Lista.get(j - 1))){
                                 Toast.makeText(MainActivity.this, "Ta sama nalepka! Spróbój jeszcze raz!", Toast.LENGTH_SHORT).show();
+                                Lista.remove(j);
                             }
                             else{
                                 Toast.makeText(MainActivity.this, "Dobra nalepka! Koniec trasy!", Toast.LENGTH_SHORT).show();
+                                mMap.addCircle(new CircleOptions()
+                                        .center(new LatLng(Double.valueOf(Wspolrzedna1.get(j)), Double.valueOf(Wspolrzedna2.get(j))))
+                                        .radius(20)
+                                        .strokeColor(Color.BLACK)
+                                        .fillColor(Color.GREEN));
+
+                                Log.i("Instance state", "Zielone");
+
+                                Circles.add(circle);
+
+                                TextView Nalepki = (TextView) findViewById(R.id.textView33);
+                                Nalepki.setText(String.valueOf(j+1)+"/"+String.valueOf(NumerNalepki.size()));
+
                                 j++;
+                                dobrenalepki++;
                                 EndOfRun();
                             }
                         }
-
                     }
                     else {
-                        if (j < 4) {
+                        if (j < NumerNalepki.size()-1) {
                             if (j > 0){
-                                if (TABLICA2[j].equals(TABLICA2[j-1])){
-                                    Toast.makeText(MainActivity.this, "Ponownie zła nalepka! Spróbój jeszcze raz!", Toast.LENGTH_SHORT).show();
+                                if (Lista.get(j).equals(Lista.get(j-1))){
+                                    Toast.makeText(MainActivity.this, "Ta sama nalepka! Spróbój jeszcze raz!", Toast.LENGTH_SHORT).show();
+                                    Lista.remove(j);
                                 }
                                 else{
                                     Toast.makeText(MainActivity.this, "Zła nalepka!", Toast.LENGTH_SHORT).show();
+                                    mMap.addCircle(new CircleOptions()
+                                            .center(new LatLng(Double.valueOf(Wspolrzedna1.get(Integer.valueOf(result)-1)), Double.valueOf(Wspolrzedna2.get(Integer.valueOf(result)-1))))
+                                            .radius(20)
+                                            .strokeColor(Color.BLACK)
+                                            .fillColor(Color.RED));
+
+                                    Circles.add(circle);
+
+                                    TextView Nalepki = (TextView) findViewById(R.id.textView33);
+                                    Nalepki.setText(String.valueOf(j+1)+"/"+String.valueOf(NumerNalepki.size()));
+                                    Log.i("Instance state", "Czerwone");
+
                                     j++;
+                                    zlenalepki++;
                                 }
                             }
                             else{
                                 Toast.makeText(MainActivity.this, "Zła nalepka!", Toast.LENGTH_SHORT).show();
+
+                                mMap.addCircle(new CircleOptions()
+                                        .center(new LatLng(Double.valueOf(Wspolrzedna1.get(Integer.valueOf(result)-1)), Double.valueOf(Wspolrzedna2.get(Integer.valueOf(result)-1))))
+                                        .radius(20)
+                                        .strokeColor(Color.BLACK)
+                                        .fillColor(Color.RED));
+
+                                Circles.add(circle);
+
+                                TextView Nalepki = (TextView) findViewById(R.id.textView33);
+                                Nalepki.setText(String.valueOf(j+1)+"/"+String.valueOf(NumerNalepki.size()));
+                                Log.i("Instance state", "Czerwone");
+
                                 j++;
+                                zlenalepki++;
                                 startTime = SystemClock.uptimeMillis();
                                 customHandler.postDelayed(updateTimerThread, 0);
                             }
                         }
 
-                        else if (j == 4){
-                            if (TABLICA2[j].equals(TABLICA2[j-1])){
+                        else if (j == NumerNalepki.size()-1){
+                            if (Lista.get(j).equals(Lista.get(j-1))){
                                 Toast.makeText(MainActivity.this, "Ponownie zła nalepka! Spróbój jeszcze raz!", Toast.LENGTH_SHORT).show();
+                                Lista.remove(j);
                             }
                             else{
                                 Toast.makeText(MainActivity.this, "Zła nalepka! Koniec trasy!", Toast.LENGTH_SHORT).show();
+
+                                mMap.addCircle(new CircleOptions()
+                                        .center(new LatLng(Double.parseDouble(Wspolrzedna1.get(Integer.valueOf(result)-1)), Double.parseDouble(Wspolrzedna2.get(Integer.valueOf(result)-1))))
+                                        .radius(20)
+                                        .strokeColor(Color.BLACK)
+                                        .fillColor(Color.RED));
+
+                                Circles.add(circle);
+
+                                TextView Nalepki = (TextView) findViewById(R.id.textView33);
+                                Nalepki.setText(String.valueOf(j+1)+"/"+String.valueOf(NumerNalepki.size()));
+                                Log.i("Instance state", "Czerwone");
+
                                 j++;
+                                zlenalepki++;
                                 EndOfRun();
                             }
                         }
                     }
                 }
                 else {
-                    Toast.makeText(MainActivity.this, "Koniec trasy!", Toast.LENGTH_SHORT).show();
+                    TextView Nalepki = (TextView) findViewById(R.id.textView33);
+                    Nalepki.setText(String.valueOf(j+1)+"/"+String.valueOf(NumerNalepki.size()));
                     EndOfRun();
                 }
             }
@@ -796,14 +1001,23 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         timeInMilliseconds = 0;
         customHandler.removeCallbacks(updateTimerThread);
 
-        TextView textView =(TextView)view.findViewById(R.id.textView2);
-        textView.setText("Twój czas wynosi:  "+ timerValue.getText());
+        TextView Czasbiegu =(TextView)view.findViewById(R.id.textView2);
 
+        TextView Zlenalepki = (TextView) view.findViewById(R.id.textView3);
+        TextView Dobrenalepki = (TextView) view.findViewById(R.id.textView4);
+
+        Czasbiegu.setText("Twój czas wynosi:  "+ timerValue.getText());
+        Zlenalepki.setText("Źle zeskanowane nalepki:  "+zlenalepki);
+        Dobrenalepki.setText("Dobrze zeskanowane nalepki:  "+dobrenalepki);
 
         timerValue.setText("000:00:00:000");
+        dobrenalepki = 0;
+        zlenalepki = 0;
         j = 0;
+        z = 0;
         PREDKOSC.setText(String.valueOf("0 km/h"));
         WYSOKOSCTERENU.setText(String.valueOf("-"));
+
 
         edt.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -946,14 +1160,16 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                             ListDir(selected);
                         } else {
 
-                            Toast.makeText(MainActivity.this,
-                                    selected.toString() + " selected",
-                                    Toast.LENGTH_LONG).show();
                             dismissDialog(CUSTOM_DIALOG_ID);
-
 
                             // ODCZYT PLIKU TXT
 
+                            NumerNalepki.clear();
+                            Wspolrzedna1.clear();
+                            Wspolrzedna2.clear();
+                            mmm7.clear();
+
+                            odczytTxt(selected);
                         }
 
                     }
@@ -1086,4 +1302,139 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
     };
 
+    //--------------------- FUNKCJA REALIZUJĄCA ODCZYT Z PLIKU TXT----------------------------------
+
+    private void odczytTxt (File plik){
+
+        String[] arr, arr2;
+        int p = 0;
+        int j = 0;
+        int s = 0;
+
+
+        try {
+            BufferedReader br = new BufferedReader(new FileReader(plik));
+            String line;
+
+            while ((line = br.readLine()) != null) {
+
+                if(line.equals("/NFCWYSCIGI/")){j = 1;}
+
+                else if (!line.equals("/latlen/") && p == 0 && j == 1) {
+                    arr = line.split(",");
+
+                    if (arr.length == 3) {
+
+                        if (arr[0].matches(("[+]?\\d+")) && (arr[1].matches(("[+]?\\d+(\\.\\d+)?")) || arr[1].matches(("[+]?\\d+"))) && (arr[2].matches(("[+]?\\d+(\\.\\d+)?")) || arr[2].matches(("[+]?\\d+")))) {
+                            NumerNalepki.add(arr[0]);
+                            Wspolrzedna1.add(arr[1]);
+                            Wspolrzedna2.add(arr[2]);
+                            s = 1;
+                        }
+
+                        else {
+                            Toast.makeText(this, "Plik zawiera niepoprawne dane! Popraw go przed wczytaniem!", Toast.LENGTH_LONG).show();
+                            break;
+                        }
+                    }
+
+                    else if (arr.length <3) {
+                        Toast.makeText(this, "Plik zawiera niekompletne dane! Popraw go przed wczytaniem!", Toast.LENGTH_LONG).show();
+                        break;
+                    }
+
+                    else if (arr.length >3) {
+                        Toast.makeText(this, "Plik zawiera niepoprawną ilość danych! Popraw go przed wczytaniem!", Toast.LENGTH_LONG).show();
+                        break;
+                    }
+
+                }
+
+                else if (line.equals("/latlen/") && j == 1){
+                    p = 1;
+                }
+
+                else if (!line.equals("/latlen/") && p == 1 && j == 1){
+                    arr2 = line.split(",");
+
+                    if (arr2.length == 3) {
+
+                        if ((arr2[0].matches(("[+]?\\d+(\\.\\d+)?")) || arr2[0].matches(("[+]?\\d+"))) && (arr2[1].matches(("[+]?\\d+(\\.\\d+)?")) || arr2[1].matches(("[+]?\\d+"))) && arr2[2].matches(("[+]?\\d+"))) {
+                            mmm7.add(arr2[0]);
+                            mmm7.add(arr2[1]);
+                            mmm7.add(arr2[2]);
+                        } else {
+                            Toast.makeText(this, "Plik zawiera niepoprawne dane! Popraw go przed wczytaniem!", Toast.LENGTH_LONG).show();
+                            break;
+                        }
+
+                    }
+
+
+                    else if (arr2.length <3) {
+                        Toast.makeText(this, "Plik zawiera niekompletne dane! Popraw go przed wczytaniem!", Toast.LENGTH_LONG).show();
+                        break;
+                    }
+
+                    else if (arr2.length >3) {
+                        Toast.makeText(this, "Plik zawiera niepoprawną ilość danych! Popraw go przed wczytaniem!", Toast.LENGTH_LONG).show();
+                        break;
+                    }
+
+                }
+
+                else if (p == 0 && s == 0){
+
+                    Toast.makeText(this, "Plik zawiera niekompletne dane! Popraw go przed wczytaniem!", Toast.LENGTH_LONG).show();
+                    break;
+
+                }
+            }
+            br.close();
+
+            if (j==0){Toast.makeText(this, "Plik nie zawiera trasy wyścigowej lub zawiera niekompletne dane! Popraw go przed wczytaniem!", Toast.LENGTH_LONG).show();}
+
+            if (!NumerNalepki.isEmpty() && !Wspolrzedna1.isEmpty() && !Wspolrzedna2.isEmpty()  && !mmm7.isEmpty()){
+
+                Toast.makeText(this, "Załadowano plik poprawnie!", Toast.LENGTH_LONG).show();
+                final Button START = (Button) findViewById(R.id.PRZYCISK_START);
+                START.setEnabled(true);
+                TworzTrase();
+
+            }
+
+        }
+        catch (IOException e) {
+            //You'll need to add proper error handling here
+
+            Toast.makeText(this, "Nie można odczytać pliku!", Toast.LENGTH_LONG).show();
+
+        }
+    }
+
+    // Przygotowywanie mapy pod trasę
+
+    private void TworzTrase () {
+
+        LatLng coordinate = new LatLng(Double.valueOf(mmm7.get(0)), Double.valueOf(mmm7.get(1)));
+        CameraUpdate yourLocation = CameraUpdateFactory.newLatLngZoom(coordinate, Float.valueOf(mmm7.get(2)));
+        mMap.animateCamera(yourLocation);
+
+        TextView Nalepki = (TextView) findViewById(R.id.textView33);
+
+
+        Nalepki.setText("0/" + String.valueOf(NumerNalepki.size()));
+
+        mMap.clear();
+
+        for (int u = 0; u < NumerNalepki.size(); u++) {
+
+        mMap.addCircle(new CircleOptions()
+                    .center(new LatLng(Double.valueOf(Wspolrzedna1.get(u)), Double.valueOf(Wspolrzedna2.get(u))))
+                    .radius(20)
+                    .strokeColor(Color.BLACK)
+                    .fillColor(Color.GRAY));
+
+        }
+    }
 }

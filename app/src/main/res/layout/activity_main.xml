@@ -117,7 +117,7 @@
         android:layout_height="wrap_content"
         android:text="START"
         android:id="@+id/PRZYCISK_START"
-        android:enabled="true"
+        android:enabled="false"
         android:layout_alignParentTop="true"
         android:layout_toStartOf="@+id/PRZYCISK_STOP" />
 
