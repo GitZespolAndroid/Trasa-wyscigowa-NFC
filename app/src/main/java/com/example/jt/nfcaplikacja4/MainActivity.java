@@ -568,6 +568,8 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
             }
 
+            // narazie działa jedynie gdy porpawnie biegniemy (wersja do dopracowania)
+
             for (int i = j; i<NumerNalepki.size(); i++){
 
             mMap.addCircle(new CircleOptions()
@@ -707,7 +709,6 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
             b = 0;
 
             mMap.clear();
-
 
             for (int i = 0; i<NumerNalepki.size(); i++){
 
