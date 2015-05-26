@@ -570,8 +570,6 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
             }
 
-            // narazie działa jedynie gdy porpawnie biegniemy (wersja do dopracowania)
-
             for (int i = 0; i<NumerNalepki.size(); i++){
 
                 if (KoloryKolek.get(i).equals("0")){
