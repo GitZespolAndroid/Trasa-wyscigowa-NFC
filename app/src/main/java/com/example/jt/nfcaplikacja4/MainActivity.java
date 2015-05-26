@@ -247,6 +247,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                 z = 0;
                 Lista.clear();
                 coordList.clear();
+                KoloryKolek.clear();
 
                 TextView Nalepki = (TextView) findViewById(R.id.textView33);
                 Nalepki.setText("0/"+String.valueOf(NumerNalepki.size()));
@@ -260,7 +261,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                             .strokeColor(Color.BLACK)
                             .fillColor(Color.GRAY));
 
-                KoloryKolek.set(i,"0");
+                KoloryKolek.add("0");
                 }
 
                 LatLng currentPosition = new LatLng(lan, lng);
