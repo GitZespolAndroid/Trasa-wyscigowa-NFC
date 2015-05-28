@@ -20,7 +20,7 @@
         android:layout_width="wrap_content"
         android:layout_marginLeft="24dip"
         android:layout_marginRight="25dip"
-        android:text="00:00:00:000"
+        android:text="000:00:00:000"
         android:gravity="left"
         android:id="@+id/textView17"
         android:layout_marginTop="25dip"
@@ -54,11 +54,12 @@
         android:layout_width="wrap_content"
         android:layout_marginLeft="24dip"
         android:layout_marginRight="20dip"
-        android:text="Zeskanowałeś łącznie:       nalepek"
+        android:text="Zeskanowałeś (zdobyłeś) łącznie:       nalepek (pozycji)"
         android:gravity="left"
         android:id="@+id/textView4"
         android:layout_marginTop="20dip"
-        android:textSize="14dp" />
+        android:textSize="14dp"
+        android:textAlignment="center" />
 
     <TextView
         android:layout_height="wrap_content"

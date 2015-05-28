@@ -136,6 +136,8 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
 
 
+
+
     // ZMIENNE ZWIĄZANE Z PRZYCISKAMI SĄ DANE ODRĘBNIE W KAŻDEJ Z FUNKCJI I KLAS, PONIEWAŻ W INNYM PRZYPADKU APLIKACJA "WYKRZACZA SIĘ"
 
     @Override
@@ -219,22 +221,22 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
         // Sprawdzenie czy jest włączone NFC i GPS
 
-            if (!mNfcAdapter.isEnabled() && (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) &&
-                    !locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))) { // Jeśli nie to wyświetl odpowiedni komunikat i zakończ aplikację
-                Toast.makeText(this, "Włącz NFC i GPS przed uruchomieniem!", Toast.LENGTH_LONG).show();
-                finish();
-            } else if (!mNfcAdapter.isEnabled() && (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
-                    locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))) { // Jeśli nie to wyświetl odpowiedni komunikat i zakończ aplikację
-                Toast.makeText(this, "Włącz NFC przed uruchomieniem!", Toast.LENGTH_LONG).show();
-                finish();
-            } else if ((!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) &&
-                    !locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) && mNfcAdapter.isEnabled()) { // Jeśli nie to wyświetl odpowiedni komunikat i zakończ aplikację
-                Toast.makeText(this, "Włącz GPS przed uruchomieniem!", Toast.LENGTH_LONG).show();
-                finish();
-            } else if ((locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
-                    locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) && mNfcAdapter.isEnabled()){ // Jeśli nie to wyświetl odpowiedni komunikat i zakończ aplikację
-                Toast.makeText(this, "NFC i GPS zostały włączone poprawnie!", Toast.LENGTH_LONG).show();
-            }
+        if (!mNfcAdapter.isEnabled() && (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) &&
+                !locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))) { // Jeśli nie to wyświetl odpowiedni komunikat i zakończ aplikację
+            Toast.makeText(this, "Włącz NFC i GPS przed uruchomieniem!", Toast.LENGTH_LONG).show();
+            finish();
+        } else if (!mNfcAdapter.isEnabled() && (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+                locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))) { // Jeśli nie to wyświetl odpowiedni komunikat i zakończ aplikację
+            Toast.makeText(this, "Włącz NFC przed uruchomieniem!", Toast.LENGTH_LONG).show();
+            finish();
+        } else if ((!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) &&
+                !locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) && mNfcAdapter.isEnabled()) { // Jeśli nie to wyświetl odpowiedni komunikat i zakończ aplikację
+            Toast.makeText(this, "Włącz GPS przed uruchomieniem!", Toast.LENGTH_LONG).show();
+            finish();
+        } else if ((locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+                locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) && mNfcAdapter.isEnabled()){ // Jeśli nie to wyświetl odpowiedni komunikat i zakończ aplikację
+            Toast.makeText(this, "NFC i GPS zostały włączone poprawnie!", Toast.LENGTH_LONG).show();
+        }
 
         //OBSLUGA PRZYCISKU START
         START.setOnClickListener(new View.OnClickListener() {
@@ -255,13 +257,13 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
                 for (int i = 0; i<NumerNalepki.size(); i++){
 
-                 mMap.addCircle(new CircleOptions()
+                    mMap.addCircle(new CircleOptions()
                             .center(new LatLng(Double.valueOf(Wspolrzedna1.get(i)), Double.valueOf(Wspolrzedna2.get(i))))
                             .radius(20)
                             .strokeColor(Color.BLACK)
                             .fillColor(Color.GRAY));
 
-                KoloryKolek.add("0");
+                    KoloryKolek.add("0");
                 }
 
                 LatLng currentPosition = new LatLng(lan, lng);
@@ -342,7 +344,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
                 Highscore();
 
-            break;
+                break;
 
             case 4:
 
@@ -422,7 +424,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
     // Włączenie ForegroundDispatcha w trakcie działania aplikacji lub jej wznowienia
     @Override
-        protected void onResume() {
+    protected void onResume() {
         super.onResume();
         setupForegroundDispatch(this, mNfcAdapter);
     }
@@ -439,13 +441,13 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
     {
         if(i == 1)
         {
-                i=0;
-                finish();
+            i=0;
+            finish();
         }
         else
         {
-               Toast.makeText(this, "Wciśnij jeszcze raz aby zamknąć.", Toast.LENGTH_SHORT).show();
-               i++;
+            Toast.makeText(this, "Wciśnij jeszcze raz aby zamknąć.", Toast.LENGTH_SHORT).show();
+            i++;
 
         }
         return;
@@ -721,7 +723,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
                     } else if (coordList.size() > 1) {
 
-                      mMap.addMarker(new MarkerOptions()
+                        mMap.addMarker(new MarkerOptions()
                                 .position(coordList.get(coordList.size() - 1))
                                 .snippet("Lat:" + lan + "Lng:" + lng));
 
@@ -858,17 +860,28 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         @Override
         protected void onPostExecute(String result) {
 
-            b = 1;
+            String[] arr, arr2;
 
-            if (result != null && !START.isEnabled()==true && !STOP.isEnabled()==false) {
+            arr = result.split(",");
+
+
+            if (arr.length != 0 && arr[0]!=null && !START.isEnabled()==true && !STOP.isEnabled()==false) {
+
+                LatLng currentPosition = new LatLng(lan, lng);
+
+                if (Math.abs(Double.valueOf(Wspolrzedna1.get(j))-currentPosition.latitude)<=0.01 && Math.abs(Double.valueOf(Wspolrzedna2.get(j))-currentPosition.longitude)<=0.01){
+
+                    b = 1;
+
+                }
 
                 //PIERWSZA PRYMITYWNA TESTOWA WERSJA "LOGIKI" ZWIĄZANEJ ZE SPRAWDZANIEM KOLEJNOSCI ZESKANOWANIA NALEPEK NFC
 
                 if (j < NumerNalepki.size()){
 
-                    Lista.add(result);
+                    Lista.add(arr[0]);
 
-                    if (NumerNalepki.get(j).equals(result)){
+                    if (NumerNalepki.get(j).equals(arr[0]) && Math.abs(Double.valueOf(Wspolrzedna1.get(j))-currentPosition.latitude)<=0.01 && Math.abs(Double.valueOf(Wspolrzedna2.get(j))-currentPosition.longitude)<=0.01){
                         if (j < NumerNalepki.size()-1) {
                             if (j > 0){
                                 if (Lista.get(j).equals(Lista.get(j-1))){
@@ -877,7 +890,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                                     Lista.remove(j);
 
                                 }
-                                else{
+                                else  {
                                     Toast.makeText(MainActivity.this, "Dobra nalepka!", Toast.LENGTH_SHORT).show();
 
                                     KoloryKolek.set(j,"1");
@@ -948,7 +961,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                             }
                         }
                     }
-                    else {
+                    else if (!NumerNalepki.get(j).equals(arr[0]) && Math.abs(Double.valueOf(Wspolrzedna1.get(j))-currentPosition.latitude)<=0.01 && Math.abs(Double.valueOf(Wspolrzedna2.get(j))-currentPosition.longitude)<=0.01) {
                         if (j < NumerNalepki.size()-1) {
                             if (j > 0){
                                 if (Lista.get(j).equals(Lista.get(j-1))){
@@ -998,7 +1011,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
                         else if (j == NumerNalepki.size()-1){
                             if (Lista.get(j).equals(Lista.get(j-1))){
-                                Toast.makeText(MainActivity.this, "Ponownie zła nalepka! Spróbój jeszcze raz!", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(MainActivity.this, "Ta sama nalepka! Spróbój jeszcze raz!", Toast.LENGTH_SHORT).show();
                                 Lista.remove(j);
                             }
                             else{
@@ -1487,13 +1500,13 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
         for (int u = 0; u < NumerNalepki.size(); u++) {
 
-        mMap.addCircle(new CircleOptions()
+            mMap.addCircle(new CircleOptions()
                     .center(new LatLng(Double.valueOf(Wspolrzedna1.get(u)), Double.valueOf(Wspolrzedna2.get(u))))
                     .radius(20)
                     .strokeColor(Color.BLACK)
                     .fillColor(Color.GRAY));
 
-        KoloryKolek.add("0");
+            KoloryKolek.add("0");
 
         }
     }
