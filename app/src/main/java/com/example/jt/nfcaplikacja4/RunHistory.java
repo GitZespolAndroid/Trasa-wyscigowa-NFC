@@ -60,15 +60,15 @@ public class RunHistory extends Activity {
         if (extras != null) {
 
             String value = extras.getString("ID");
-            String value2 = extras.getString("Nazwabiegu");
-            String value3 = extras.getString("Czasbiegu");
-            String value5 = extras.getString("Dobrenalepki");
-            String value6 = extras.getString("Zlenalepki");
-            String value7 = extras.getString("Razemnalepek");
-            String currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
 
             if (value == "2"){
 
+                String value2 = extras.getString("Nazwabiegu");
+                String value3 = extras.getString("Czasbiegu");
+                String value5 = extras.getString("Dobrenalepki");
+                String value6 = extras.getString("Zlenalepki");
+                String value7 = extras.getString("Razemnalepek");
+                String currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
                 BuildTable(value2,value3,currentDate,Integer.valueOf(value5),Integer.valueOf(value6),Integer.valueOf(value7));
 
             }

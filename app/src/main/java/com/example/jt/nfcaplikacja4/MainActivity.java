@@ -1361,8 +1361,6 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                         fileList2.add(file.getName());
                     }
                 }
-
-
             }
 
             ArrayAdapter<String> directoryList
