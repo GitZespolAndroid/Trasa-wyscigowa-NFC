@@ -4,6 +4,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.TextView;
 
 
 public class PlaceInformation extends ActionBarActivity {
@@ -12,6 +13,34 @@ public class PlaceInformation extends ActionBarActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_place_information);
+
+        Bundle extras = getIntent().getExtras();
+
+        if (extras != null) {
+
+            String value = extras.getString("Nazwamiejsca");
+            String value2 = extras.getString("Wspolrzedne");
+            String value3 = extras.getString("Adres");
+            String value4 = extras.getString("AdresWWW");
+            String value5 = extras.getString("ZdjecieAdresWWW");
+            String value6 = extras.getString("OpisMiejsca");
+
+            TextView NazwaMiejsca = (TextView) findViewById(R.id.textView40);
+            TextView Wspolrzedne = (TextView) findViewById(R.id.textView41);
+            TextView Adres = (TextView) findViewById(R.id.textView42);
+            TextView AdresWWW = (TextView) findViewById(R.id.textView43);
+            TextView ZdjecieAdresWWW = (TextView) findViewById(R.id.textView44);
+            TextView OpisMiejsca = (TextView) findViewById(R.id.textView45);
+
+            NazwaMiejsca.setText(value);
+            Wspolrzedne.setText(value2);
+            Adres.setText(value3);
+            AdresWWW.setText(value4);
+            ZdjecieAdresWWW.setText(value5);
+            OpisMiejsca.setText(value6);
+        }
+
+
     }
 
 

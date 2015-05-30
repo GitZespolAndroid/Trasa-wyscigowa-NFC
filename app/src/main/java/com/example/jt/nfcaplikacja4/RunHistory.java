@@ -18,7 +18,10 @@ import android.widget.TableLayout;
 import android.widget.TableRow;
 import android.widget.TextView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
+import java.util.Locale;
 
 
 public class RunHistory extends Activity {
@@ -52,6 +55,25 @@ public class RunHistory extends Activity {
 
         RebuildTable();
 
+        Bundle extras = getIntent().getExtras();
+
+        if (extras != null) {
+
+            String value = extras.getString("ID");
+            String value2 = extras.getString("Nazwabiegu");
+            String value3 = extras.getString("Czasbiegu");
+            String value5 = extras.getString("Dobrenalepki");
+            String value6 = extras.getString("Zlenalepki");
+            String value7 = extras.getString("Razemnalepek");
+            String currentDate = new SimpleDateFormat("dd-MM-yyyy", Locale.getDefault()).format(new Date());
+
+            if (value == "2"){
+
+                BuildTable(value2,value3,currentDate,Integer.valueOf(value5),Integer.valueOf(value6),Integer.valueOf(value7));
+
+            }
+
+        }
     }
 
     // WSTAWIANIE DANYCH DOTYCZĄCYCH UKONCZONEGO BIEGU (PO JEGO ZAKONCZENIU)
@@ -97,7 +119,6 @@ public class RunHistory extends Activity {
     // WCZYTYWANIE TABELI Z DOTYCHCZASOWYMI WCZESNIEJSZYMI BIEGAMI
 
     private void RebuildTable(){
-
 
         SharedPreferences sPrefs= PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         int size=sPrefs.getInt("size",0);

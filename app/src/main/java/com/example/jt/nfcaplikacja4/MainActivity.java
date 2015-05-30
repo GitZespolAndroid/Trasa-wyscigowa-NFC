@@ -132,6 +132,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
     ArrayList<String> mmm7 = new ArrayList<String>();
     ArrayList<String> Lista = new ArrayList<String>();
     ArrayList<String> KoloryKolek = new ArrayList<String>();
+    ArrayList<String> InformacjeOMiejscu = new ArrayList<String>();
     List<Circle> Circles = new ArrayList<Circle>();
 
 
@@ -219,24 +220,30 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
             finish();
         }
 
+
+
         // Sprawdzenie czy jest włączone NFC i GPS
 
-        if (!mNfcAdapter.isEnabled() && (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) &&
-                !locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))) { // Jeśli nie to wyświetl odpowiedni komunikat i zakończ aplikację
-            Toast.makeText(this, "Włącz NFC i GPS przed uruchomieniem!", Toast.LENGTH_LONG).show();
-            finish();
-        } else if (!mNfcAdapter.isEnabled() && (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
-                locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))) { // Jeśli nie to wyświetl odpowiedni komunikat i zakończ aplikację
-            Toast.makeText(this, "Włącz NFC przed uruchomieniem!", Toast.LENGTH_LONG).show();
-            finish();
-        } else if ((!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) &&
-                !locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) && mNfcAdapter.isEnabled()) { // Jeśli nie to wyświetl odpowiedni komunikat i zakończ aplikację
-            Toast.makeText(this, "Włącz GPS przed uruchomieniem!", Toast.LENGTH_LONG).show();
-            finish();
-        } else if ((locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
-                locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) && mNfcAdapter.isEnabled()){ // Jeśli nie to wyświetl odpowiedni komunikat i zakończ aplikację
-            Toast.makeText(this, "NFC i GPS zostały włączone poprawnie!", Toast.LENGTH_LONG).show();
+        if (mNfcAdapter!=null && str.size()>0) {
+
+            if (!mNfcAdapter.isEnabled() && (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) &&
+                    !locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))) { // Jeśli nie to wyświetl odpowiedni komunikat i zakończ aplikację
+                Toast.makeText(this, "Włącz NFC i GPS przed uruchomieniem!", Toast.LENGTH_LONG).show();
+                finish();
+            } else if (!mNfcAdapter.isEnabled() && (locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+                    locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER))) { // Jeśli nie to wyświetl odpowiedni komunikat i zakończ aplikację
+                Toast.makeText(this, "Włącz NFC przed uruchomieniem!", Toast.LENGTH_LONG).show();
+                finish();
+            } else if ((!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) &&
+                    !locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) && mNfcAdapter.isEnabled()) { // Jeśli nie to wyświetl odpowiedni komunikat i zakończ aplikację
+                Toast.makeText(this, "Włącz GPS przed uruchomieniem!", Toast.LENGTH_LONG).show();
+                finish();
+            } else if ((locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER) ||
+                    locationManager.isProviderEnabled(LocationManager.NETWORK_PROVIDER)) && mNfcAdapter.isEnabled()) { // Jeśli nie to wyświetl odpowiedni komunikat i zakończ aplikację
+                Toast.makeText(this, "NFC i GPS zostały włączone poprawnie!", Toast.LENGTH_LONG).show();
+            }
         }
+
 
         //OBSLUGA PRZYCISKU START
         START.setOnClickListener(new View.OnClickListener() {
@@ -328,6 +335,12 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
             case 1 :
 
                 Intent intent = new Intent(this,PlaceInformation.class);
+                intent.putExtra("Nazwamiejsca",InformacjeOMiejscu.get(1));
+                intent.putExtra("Wspolrzedne",InformacjeOMiejscu.get(2));
+                intent.putExtra("Adres",InformacjeOMiejscu.get(3));
+                intent.putExtra("AdresWWW",InformacjeOMiejscu.get(4));
+                intent.putExtra("ZdjecieAdresWWW",InformacjeOMiejscu.get(5));
+                intent.putExtra("OpisMiejsca",InformacjeOMiejscu.get(6));
                 startActivity(intent);
 
                 break;
@@ -336,6 +349,10 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
             case 2:
 
                 Intent intent2 = new Intent(MainActivity.this,RunHistory.class);
+
+                intent2.putExtra("ID","1");
+
+
                 startActivity(intent2);
 
                 break;
@@ -860,12 +877,34 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         @Override
         protected void onPostExecute(String result) {
 
-            String[] arr, arr2;
+            String[] arr;
+
+            InformacjeOMiejscu.clear();
 
             arr = result.split(",");
 
 
-            if (arr.length != 0 && arr[0]!=null && !START.isEnabled()==true && !STOP.isEnabled()==false) {
+            for (int i = 0; i<arr.length; i++){
+
+                InformacjeOMiejscu.add(arr[i]);
+
+            }
+
+            if (arr.length !=0){
+
+                Toast.makeText(MainActivity.this, "Nalepka jest pusta!", Toast.LENGTH_LONG).show();
+
+            }
+
+            if (arr.length<7){
+
+                Toast.makeText(MainActivity.this, "Nalepka zawiera za mało danych!", Toast.LENGTH_LONG).show();
+
+            }
+
+
+
+            if (arr.length == 7 && !START.isEnabled()==true && !STOP.isEnabled()==false) {
 
                 LatLng currentPosition = new LatLng(lan, lng);
 
@@ -1072,10 +1111,11 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         timeInMilliseconds = 0;
         customHandler.removeCallbacks(updateTimerThread);
 
-        TextView Czasbiegu =(TextView)view.findViewById(R.id.textView2);
+        final TextView Czasbiegu =(TextView)view.findViewById(R.id.textView2);
 
-        TextView Zlenalepki = (TextView) view.findViewById(R.id.textView3);
-        TextView Dobrenalepki = (TextView) view.findViewById(R.id.textView4);
+        final TextView Zlenalepki = (TextView) view.findViewById(R.id.textView3);
+        final TextView Dobrenalepki = (TextView) view.findViewById(R.id.textView4);
+        final EditText Nazwabiegu = (EditText) view.findViewById(R.id.editText);
 
         Czasbiegu.setText("Twój czas wynosi:  "+ timerValue.getText());
         Zlenalepki.setText("Źle zeskanowane nalepki:  "+zlenalepki);
@@ -1113,6 +1153,12 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
                         Intent intentRunHistory = new Intent(MainActivity.this,RunHistory.class);
+                        intentRunHistory.putExtra("ID","2");
+                        intentRunHistory.putExtra("Nazwabiegu",Nazwabiegu.getText());
+                        intentRunHistory.putExtra("Czasbiegu",Czasbiegu.getText());
+                        intentRunHistory.putExtra("Dobrenalepki",Dobrenalepki.getText());
+                        intentRunHistory.putExtra("Zlenalepki",Zlenalepki.getText());
+                        intentRunHistory.putExtra("Razemnalepek",String.valueOf(NumerNalepki.size()));
                         startActivity(intentRunHistory);
 
                     }
