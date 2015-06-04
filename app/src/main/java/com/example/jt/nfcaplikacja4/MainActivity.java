@@ -7,6 +7,7 @@ import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.Comparator;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
@@ -15,6 +16,7 @@ import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Dialog;
 import android.content.DialogInterface;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.location.Criteria;
 import android.location.Location;
@@ -25,6 +27,7 @@ import android.net.Uri;
 import android.os.CountDownTimer;
 import android.os.Handler;
 import android.os.SystemClock;
+import android.preference.PreferenceManager;
 import android.provider.Settings;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -136,9 +139,6 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
     List<Circle> Circles = new ArrayList<Circle>();
 
 
-
-
-
     // ZMIENNE ZWIĄZANE Z PRZYCISKAMI SĄ DANE ODRĘBNIE W KAŻDEJ Z FUNKCJI I KLAS, PONIEWAŻ W INNYM PRZYPADKU APLIKACJA "WYKRZACZA SIĘ"
 
     @Override
@@ -165,8 +165,76 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         root = new File("/");
         curFolder = root;
 
+        ArrayList<String> Czasybiegow = new ArrayList<String>();
+        ArrayList<String> Czasybiegow2 = new ArrayList<String>();
+        ArrayList<String> Nazwybiegow = new ArrayList<String>();
+        ArrayList<String> Datybiegow = new ArrayList<String>();
+        ArrayList<String> Dobrenalepkii = new ArrayList<String>();
+        ArrayList<String> Zlenalepkii = new ArrayList<String>();
+        ArrayList<String> Razemnalepeki = new ArrayList<String>();
+
+        //------------------------OBSŁUGA HIGHSCORA-----------------------------------------------
+
+        SharedPreferences sPrefs= PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        int size=sPrefs.getInt("size",0);
+        int cv = 0;
+        LayoutInflater inf22 = LayoutInflater.from(this);
+        final View view5 = inf22.inflate(R.layout.activity_highscore, null);
+
+        if(size!=0) {
+
+            for (int j = 2; j <= size - 5; j = j + 7) {
+                Czasybiegow.add(sPrefs.getString("val" + j, null));
+                Czasybiegow2.add(sPrefs.getString("val" + j, null));
+            }
+
+            for (int j = 1; j <= size - 6; j = j + 7) {
+                Nazwybiegow.add(sPrefs.getString("val" + j, null));
+            }
+
+            for (int j = 3; j <= size - 4; j = j + 7) {
+                Datybiegow.add(sPrefs.getString("val" + j, null));
+            }
+
+            for (int j = 4; j <= size - 3; j = j + 7) {
+                Dobrenalepkii.add(sPrefs.getString("val" + j, null));
+            }
+
+            for (int j = 5; j <= size - 2; j = j + 7) {
+                Zlenalepkii.add(sPrefs.getString("val" + j, null));
+            }
+
+            for (int j = 6; j <= size - 1; j = j + 7) {
+                Razemnalepeki.add(sPrefs.getString("val" + j, null));
+            }
+
+            Collections.sort(Czasybiegow);
+
+            for (int i = 0; i < Czasybiegow.size(); i++) {
+
+                if (Czasybiegow.get(0).equals(Czasybiegow2.get(i))) {
+
+                    cv = i;
+                    break;
+
+                }
+
+            }
+
+            final TextView Czasbiegu = (TextView) view5.findViewById(R.id.textView17);
+            final TextView Nazwabiegu = (TextView) view5.findViewById(R.id.textView5);
+            final TextView Databiegu = (TextView) view5.findViewById(R.id.textView3);
+            final TextView Lacznienalepek = (TextView) view5.findViewById(R.id.textView4);
+            final TextView Dobreizlenalepki = (TextView) view5.findViewById(R.id.textView16);
 
 
+            Czasbiegu.setText(Czasybiegow.get(0));
+            Nazwabiegu.setText("Był to bieg o nazwie:  " + Nazwybiegow.get(cv));
+            Databiegu.setText("Dnia:  " + Datybiegow.get(cv));
+            Lacznienalepek.setText("Zeskanowałeś łącznie:  " + Razemnalepeki.get(cv) + " nalepek");
+            Dobreizlenalepki.setText("z czego:  " + Dobrenalepkii.get(cv) + "dobrze, a  " + Zlenalepkii.get(cv) + " źle");
+
+        }
 
         //------------------------OBIEKTY DO MAPY------------------------------------------------
 
