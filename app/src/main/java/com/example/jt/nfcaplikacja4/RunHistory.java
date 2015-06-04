@@ -45,8 +45,6 @@ public class RunHistory extends Activity {
         tak2 = (TextView) findViewById(R.id.textView8);
         tak3 = (TextView) findViewById(R.id.textView9);
         tak4 = (TextView) findViewById(R.id.textView6);
-
-
         lol = (GridLayout) findViewById(R.id.Grid1);
         lol2 = (GridLayout) findViewById(R.id.Grid2);
         lol3 = (GridLayout) findViewById(R.id.Grid3);
@@ -72,7 +70,6 @@ public class RunHistory extends Activity {
                 BuildTable(value2,value3,currentDate,Integer.valueOf(value5),Integer.valueOf(value6),Integer.valueOf(value7));
 
             }
-
         }
     }
 
@@ -282,6 +279,23 @@ public class RunHistory extends Activity {
                 table_layout.addView(row);
             }
         }
+    }
+
+    @Override
+    public void onDestroy() {
+
+        super.onDestroy();
+
+        SharedPreferences sPrefs= PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
+        SharedPreferences.Editor sEdit=sPrefs.edit();
+
+        for(int i=0;i<sInfo.size();i++)
+        {
+            sEdit.putString("val"+i,sInfo.get(i));
+        }
+        sEdit.putInt("size",sInfo.size());
+        sEdit.commit();
+
     }
 
     @Override
