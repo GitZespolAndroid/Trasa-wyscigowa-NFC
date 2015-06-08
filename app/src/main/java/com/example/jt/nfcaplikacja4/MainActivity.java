@@ -173,6 +173,23 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         ArrayList<String> Zlenalepkii = new ArrayList<String>();
         ArrayList<String> Razemnalepeki = new ArrayList<String>();
 
+        // --------------------- INFORMACJE O AKTUALNYM MIEJSCU ----------------------------------
+
+        Intent intent999 = new Intent(MainActivity.this,PlaceInformation.class);
+
+        if (InformacjeOMiejscu.size()!=0) {
+
+            intent999.putExtra("Nazwamiejsca", InformacjeOMiejscu.get(0));
+            intent999.putExtra("Wspolrzedne", InformacjeOMiejscu.get(1));
+            intent999.putExtra("Adres", InformacjeOMiejscu.get(2));
+            intent999.putExtra("AdresWWW", InformacjeOMiejscu.get(3));
+            intent999.putExtra("ZdjecieAdresWWW", InformacjeOMiejscu.get(4));
+            intent999.putExtra("OpisMiejsca", InformacjeOMiejscu.get(5));
+        }
+
+
+
+
         //------------------------OBSŁUGA HIGHSCORA-----------------------------------------------
 
         SharedPreferences sPrefs= PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
