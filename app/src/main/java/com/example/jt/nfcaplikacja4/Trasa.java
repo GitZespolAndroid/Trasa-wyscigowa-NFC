@@ -70,96 +70,210 @@ public class Trasa {
     ///////////////////////////////////////////////////////////////////////
 
 
-
+    /**
+     *
+     * @return
+     */
     public int getId() {
         return id;
     }
 
+    /**
+     *
+     * @param id
+     */
     public void setId(int id) {
         this.id = id;
     }
+
+    /**
+     *
+     * @return
+     */
 
     public String getNazwa() {
         return nazwa;
     }
 
+    /**
+     *
+     * @param nazwa
+     */
+
     public void setNazwa(String nazwa) {
         this.nazwa = nazwa;
     }
+
+    /**
+     *
+     * @return
+     */
 
     public double getDistanceKm() {
         return distanceKm;
     }
 
+    /**
+     *
+     * @param distanceKm
+     */
+
     public void setDistanceKm(double distanceKm) {
         this.distanceKm = distanceKm;
     }
+
+    /**
+     *
+     * @return
+     */
 
     public double getDistanceMile() {
         return distanceMile;
     }
 
+    /**
+     *
+     * @param distanceMile
+     */
+
     public void setDistanceMile(double distanceMile) {
         this.distanceMile = distanceMile;
     }
+
+    /**
+     *
+     * @return
+     */
 
     public String getDistance() {
         return distance;
     }
 
+    /**
+     *
+     * @param distance
+     */
+
     public void setDistance(String distance) {
         this.distance = distance;
     }
+
+    /**
+     *
+     * @return
+     */
 
     public boolean isKm() {
         return km;
     }
 
+    /**
+     *
+     * @param km
+     */
+
     public void setKm(boolean km) {
         this.km = km;
     }
+
+    /**
+     *
+     * @return
+     */
 
     public String[] getTablicaKodowNFC() {
         return tablicaKodowNFC;
     }
 
+    /**
+     *
+     * @param tablicaKodowNFC
+     */
+
     public void setTablicaKodowNFC(String[] tablicaKodowNFC) {
         this.tablicaKodowNFC = tablicaKodowNFC;
     }
+
+    /**
+     *
+     * @return
+     */
 
     public String getNajlepszyUżytkownik() {
         return najlepszyUżytkownik;
     }
 
+    /**
+     *
+     * @param najlepszyUżytkownik
+     */
+
     public void setNajlepszyUżytkownik(String najlepszyUżytkownik) {
         this.najlepszyUżytkownik = najlepszyUżytkownik;
     }
+
+    /**
+     *
+     * @return
+     */
 
     public String getNajlepszyCzas() {
         return najlepszyCzas;
     }
 
+    /**
+     *
+     * @param najlepszyCzas
+     */
+
     public void setNajlepszyCzas(String najlepszyCzas) {
         this.najlepszyCzas = najlepszyCzas;
     }
+
+    /**
+     *
+     * @param nextId
+     */
 
 
     public static void setNextId(int nextId) {
         Trasa.nextId = nextId;
     }
 
+    /**
+     *
+     * @param miles
+     * @return
+     */
+
     /// Reszta metod
 
     //Zamiana jednostek
+
+    /**
+     *
+     * @param miles
+     * @return
+     */
     public static double zamianaNaKm(double miles) {
         return (miles*ZAMIANA_JEDNOSTEK);
     }
 
+    /**
+     *
+     * @param km
+     * @return
+     */
     public static double zamianaNaMile(double km) {
         return (km/ZAMIANA_JEDNOSTEK);
     }
 
     //metoda zwracająca String z informacjami o trasie oddzielonymi znacznikami
+
+    /**
+     *
+     * @return
+     */
     public String getPrintString() {
         String znacznik = ")@(*%&$_";
         String koncowy="";
@@ -170,6 +284,11 @@ public class Trasa {
     }
 
     //metoda zwracajaca tablice obiektow dajacych informacje o trasie- potrzebne do zapisu trasy
+
+    /**
+     *
+     * @return
+     */
     public Object[] utworzenieTablicyZInformacjiami() {
         Object[] tablicaDanych = new Object[9];
         tablicaDanych[0] = id;
@@ -185,6 +304,11 @@ public class Trasa {
     }
 
     //Zapis do pliku
+
+    /**
+     *
+     * @throws FileNotFoundException
+     */
     public void zapisDoPliku() throws FileNotFoundException {
         File plikTrasy = new File(this.nazwa + ".txt");
         zapisPliku = new PrintWriter(plikTrasy);
@@ -204,6 +328,14 @@ public class Trasa {
 
     //odczyt pliku
 
+
+    /**
+     *
+     *
+     * @param odczytywanyPlik
+     * @return
+     * @throws FileNotFoundException
+     */
     public static Trasa wczytywanieTrasyZPliku (File odczytywanyPlik) throws FileNotFoundException {
         odczytPliku = new Scanner(odczytywanyPlik);
         String zawartoscTxt = odczytPliku.nextLine();

@@ -74,6 +74,8 @@ import com.google.android.gms.maps.model.PolylineOptions;
 
 import org.w3c.dom.Text;
 
+
+
 public class MainActivity extends ActionBarActivity implements LocationListener, NavigationDrawerFragment.NavigationDrawerCallbacks {
 
     private NfcAdapter mNfcAdapter;
@@ -139,7 +141,12 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
     List<Circle> Circles = new ArrayList<Circle>();
 
 
-    // ZMIENNE ZWIĄZANE Z PRZYCISKAMI SĄ DANE ODRĘBNIE W KAŻDEJ Z FUNKCJI I KLAS, PONIEWAŻ W INNYM PRZYPADKU APLIKACJA "WYKRZACZA SIĘ"
+    // ZMIENNE ZWIAZANE Z PRZYCISKAMI SA DANE ODREBNIE W KAZDEJ Z FUNKCJI I KLAS, PONIEWAZ W INNYM PRZYPADKU APLIKACJA "WYKRZACZA SIE"
+
+    /**
+     *
+     * @param savedInstanceState
+     */
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -190,7 +197,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
 
 
-        //------------------------OBSŁUGA HIGHSCORA-----------------------------------------------
+        //------------------------OBSLUGA HIGHSCORA-----------------------------------------------
 
         SharedPreferences sPrefs= PreferenceManager.getDefaultSharedPreferences(getApplicationContext());
         int size=sPrefs.getInt("size",0);
@@ -411,6 +418,11 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
     //--------MENU ROZWIJANE PO LEWO ---------------------------------------------------------------
 
+    /**
+     *
+     * @param position
+     */
+
     public void onNavigationDrawerItemSelected(int position) {
 
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -473,6 +485,11 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
     }
 
+    /**
+     *
+     * @param number
+     */
+
     public void onSectionAttached(int number) {
         switch (number) {
             case 1:
@@ -493,6 +510,12 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         }
     }
 
+    /**
+     *
+     * @param menu
+     * @return
+     */
+
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         if (!mNavigationDrawerFragment.isDrawerOpen()) {
@@ -506,6 +529,13 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
         return super.onCreateOptionsMenu(menu);
     }
+
+
+    /**
+     *
+     * @param item
+     * @return
+     */
 
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
@@ -539,6 +569,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
     }
 
     //Zapobiegnięcie przed przypadkowym zamknięciem aplikacji
+
     public void onBackPressed()
     {
         if(i == 1)
@@ -556,6 +587,12 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
     }
 
     // Obsługa tagu bezpośrednio po wykryciu
+
+    /**
+     *
+     * @param intent
+     */
+
     @Override
     protected void onNewIntent(Intent intent) {
 
@@ -568,6 +605,12 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
     }
 
     // Odczyt zawartości taga
+
+    /**
+     *
+     * @param intent
+     */
+
     private void handleIntent(Intent intent) {
 
 
@@ -599,6 +642,13 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
     }
 
     // Funkcja realizująca działanie ForegroundDispatcha
+
+    /**
+     *
+     * @param activity
+     * @param adapter
+     */
+
     public static void setupForegroundDispatch(final ActionBarActivity activity, NfcAdapter adapter) {
         final Intent intent = new Intent(activity.getApplicationContext(), activity.getClass());
         intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
@@ -621,13 +671,25 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
     }
 
     // Funkcja realizująca wstrzymanie ForegroundDispatcha
+
+    /**
+     *
+     * @param activity
+     * @param adapter
+     */
+
     public static void stopForegroundDispatch(final ActionBarActivity activity, NfcAdapter adapter) {
         adapter.disableForegroundDispatch(activity);
     }
 
 
 
-    // RYSOWANIE NA MAPIE GDY JEST ZAŁADOWANA
+    // RYSOWANIE NA MAPIE GDY JEST ZALADOWANA
+
+    /**
+     *
+     * @param location
+     */
 
     @Override
     public void onLocationChanged(Location location) {
@@ -641,7 +703,12 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         }
     }
 
-    // OBSŁUGA MAPY (RYSOWANIE KURSORA I SLADU BIEGU NA MAPIE)
+    // OBSLUGA MAPY (RYSOWANIE KURSORA I SLADU BIEGU NA MAPIE)
+
+    /**
+     *
+     * @param location
+     */
 
     private void drawMarker(Location location) {
 
@@ -882,15 +949,33 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
     }
 
 
+    /**
+     *
+     * @param provider
+     * @param status
+     * @param extras
+     */
+
     @Override
     public void onStatusChanged(String provider, int status, Bundle extras) {
 
     }
 
+    /**
+     *
+     * @param provider
+     */
+
     @Override
     public void onProviderEnabled(String provider) {
 
     }
+
+
+    /**
+     *
+     * @param provider
+     */
 
     @Override
     public void onProviderDisabled(String provider) {
@@ -899,6 +984,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
 
     // Klasa realizująca odczyt zawartości z taga (poprzez funkcję HandleIntent)
+
     private class NdefReaderTask extends AsyncTask<Tag, Void, String> {
 
         final Button START = (Button) findViewById(R.id.PRZYCISK_START);
@@ -934,6 +1020,13 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
             return null;
         }
 
+        /**
+         *
+         * @param record
+         * @return
+         * @throws UnsupportedEncodingException
+         */
+
         //Pobierz zawartość z taga
         private String readText(NdefRecord record) throws UnsupportedEncodingException {
         /*
@@ -959,6 +1052,12 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         }
 
         //Wyświelt pobraną zawartość taga z doInBackground (realizacja bezpośrednio po zakończeniu się doInBackground).
+
+
+        /**
+         *
+         * @param result
+         */
         @Override
         protected void onPostExecute(String result) {
 
@@ -1170,7 +1269,8 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         }
     }
 
-    // WYSWIETLANIE OKIENKA Z ZAPISEM BIEGU DO HISTORII (PO SKONCZONYM BIEGU) I OBSŁUGA PRZYCISKOW ORAZ STOPERA PO ZAKONCZENIU BIEGU
+    // WYSWIETLANIE OKIENKA Z ZAPISEM BIEGU DO HISTORII (PO SKONCZONYM BIEGU) I OBSLUGA PRZYCISKOW ORAZ STOPERA PO ZAKONCZENIU BIEGU
+
 
     public void EndOfRun(){
 
@@ -1283,6 +1383,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
     /**
      * A placeholder fragment containing a simple view.
      */
+
     public static class PlaceholderFragment extends Fragment {
         /**
          * The fragment argument representing the section number for this
@@ -1302,8 +1403,20 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
             return fragment;
         }
 
+        /**
+         *
+         */
+
         public PlaceholderFragment() {
         }
+
+        /**
+         *
+         * @param inflater
+         * @param container
+         * @param savedInstanceState
+         * @return
+         */
 
         @Override
         public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -1311,6 +1424,11 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
             View rootView = inflater.inflate(R.layout.fragment_main, container, false);
             return rootView;
         }
+
+        /**
+         *
+         * @param activity
+         */
 
         @Override
         public void onAttach(Activity activity) {
@@ -1321,6 +1439,12 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
     }
 
     //----------------------OTWIERANIE PLIKU Z TRASĄ I WCZYTYWANIE----------------------------------
+
+    /**
+     *
+     * @param id
+     * @return
+     */
 
     @Override
     protected Dialog onCreateDialog(int id) {
@@ -1383,6 +1507,13 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         return dialog;
     }
 
+    /**
+     *
+     * @param id
+     * @param dialog
+     * @param bundle
+     */
+
     @Override
     protected void onPrepareDialog(int id, Dialog dialog, Bundle bundle) {
         // TODO Auto-generated method stub
@@ -1395,6 +1526,11 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         }
 
     }
+
+    /**
+     *
+     * @param f
+     */
 
     void ListDir(File f) {
 
@@ -1504,6 +1640,10 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
     //--------------------- FUNKCJA REALIZUJĄCA ODCZYT Z PLIKU TXT----------------------------------
 
+    /**
+     *
+     * @param plik
+     */
     private void odczytTxt (File plik){
 
         String[] arr, arr2;

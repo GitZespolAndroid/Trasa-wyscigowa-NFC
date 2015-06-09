@@ -34,6 +34,11 @@ public class RunHistory extends Activity {
     ArrayList<String> sInfo = new ArrayList<String>();
     int m = 1;
 
+
+    /**
+     *
+     * @param savedInstanceState
+     */
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +79,16 @@ public class RunHistory extends Activity {
     }
 
     // WSTAWIANIE DANYCH DOTYCZĄCYCH UKONCZONEGO BIEGU (PO JEGO ZAKONCZENIU)
+
+    /**
+     *
+     * @param NazwaBiegu
+     * @param CzasBiegu
+     * @param Data
+     * @param DobreNalepki
+     * @param ZleNalepki
+     * @param RazemNalepek
+     */
     private void BuildTable(String NazwaBiegu, String CzasBiegu, String Data, int DobreNalepki, int ZleNalepki, int RazemNalepek ) {
 
         // outer for loop
@@ -298,6 +313,11 @@ public class RunHistory extends Activity {
 
     }
 
+    /**
+     *
+     * @param menu
+     * @return
+     */
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
@@ -305,6 +325,11 @@ public class RunHistory extends Activity {
         return true;
     }
 
+    /**
+     *
+     * @param item
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         // Handle action bar item clicks here. The action bar will
