@@ -103,7 +103,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
     Button buttonOpenDialog;
     Button buttonUp;
-    TextView textFolder, timerValue;
+    TextView textFolder, timerValue, timerValue2;
     ImageView image;
     int o,b,zlenalepki,dobrenalepki = 0;
     float distance;
@@ -120,12 +120,18 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
     private List<String> fileList2 = new ArrayList<String>();
 
     private long startTime = 0L;
+    private long startTime2 = 0L;
 
     private Handler customHandler = new Handler();
+    private Handler customHandler2 = new Handler();
+
 
     long timeInMilliseconds = 0L;
+    long timeInMilliseconds2 = 0L;
     long timeSwapBuff = 0L;
+    long timeSwapBuff2 = 0L;
     long updatedTime = 0L;
+    long updatedTime2 = 0L;
 
     Intent intent3;
 
@@ -163,6 +169,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         TextView PREDKOSC = (TextView) findViewById(R.id.textView32);
         TextView WYSOKOSCTERENU = (TextView) findViewById(R.id.textView29);
         timerValue = (TextView) findViewById(R.id.textView34);
+        timerValue2 = (TextView) findViewById(R.id.textView47);
         LocationManager locationManager;
 
         image = (ImageView) findViewById(R.id.image);
@@ -385,10 +392,15 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                 dobrenalepki = 0;
                 zlenalepki = 0;
                 updatedTime=0;
+                updatedTime2=0;
                 timeSwapBuff = 0;
+                timeSwapBuff2 = 0;
                 timeInMilliseconds = 0;
+                timeInMilliseconds2 = 0;
                 customHandler.removeCallbacks(updateTimerThread);
+                customHandler2.removeCallbacks(updateTimerThread2);
                 timerValue.setText("000:00:00:000");
+                timerValue2.setText("000:00:00:000");
                 distance = 0;
                 TextView Dystans = (TextView) findViewById(R.id.textView27);
                 Dystans.setText(String.valueOf("0 m"));
@@ -1139,6 +1151,14 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
                                     j++;
                                     dobrenalepki++;
+
+                                    updatedTime2=0;
+                                    timeSwapBuff2 = 0;
+                                    timeInMilliseconds2 = 0;
+                                    customHandler2.removeCallbacks(updateTimerThread2);
+                                    timerValue2.setText("000:00:00:000");
+                                    startTime2 = SystemClock.uptimeMillis();
+                                    customHandler2.postDelayed(updateTimerThread2, 0);
                                 }
                             }
                             else{
@@ -1161,6 +1181,13 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                                 dobrenalepki++;
                                 startTime = SystemClock.uptimeMillis();
                                 customHandler.postDelayed(updateTimerThread, 0);
+                                updatedTime2=0;
+                                timeSwapBuff2 = 0;
+                                timeInMilliseconds2 = 0;
+                                customHandler2.removeCallbacks(updateTimerThread2);
+                                timerValue2.setText("000:00:00:000");
+                                startTime2 = SystemClock.uptimeMillis();
+                                customHandler2.postDelayed(updateTimerThread2, 0);
                             }
                         }
 
@@ -1216,6 +1243,13 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
                                     j++;
                                     zlenalepki++;
+                                    updatedTime2=0;
+                                    timeSwapBuff2 = 0;
+                                    timeInMilliseconds2 = 0;
+                                    customHandler2.removeCallbacks(updateTimerThread2);
+                                    timerValue2.setText("000:00:00:000");
+                                    startTime2 = SystemClock.uptimeMillis();
+                                    customHandler2.postDelayed(updateTimerThread2, 0);
                                 }
                             }
                             else{
@@ -1237,6 +1271,13 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
                                 zlenalepki++;
                                 startTime = SystemClock.uptimeMillis();
                                 customHandler.postDelayed(updateTimerThread, 0);
+                                updatedTime2=0;
+                                timeSwapBuff2 = 0;
+                                timeInMilliseconds2 = 0;
+                                customHandler2.removeCallbacks(updateTimerThread2);
+                                timerValue2.setText("000:00:00:000");
+                                startTime2 = SystemClock.uptimeMillis();
+                                customHandler2.postDelayed(updateTimerThread2, 0);
                             }
                         }
 
@@ -1300,9 +1341,13 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         buttonOpenDialog.setEnabled(true);
 
         updatedTime=0;
+        updatedTime2=0;
         timeSwapBuff = 0;
+        timeSwapBuff2 = 0;
         timeInMilliseconds = 0;
+        timeInMilliseconds2 = 0;
         customHandler.removeCallbacks(updateTimerThread);
+        customHandler2.removeCallbacks(updateTimerThread2);
 
         final TextView Czasbiegu =(TextView)view.findViewById(R.id.textView2);
 
@@ -1315,6 +1360,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         Dobrenalepki.setText("Dobrze zeskanowane nalepki:  "+dobrenalepki);
 
         timerValue.setText("000:00:00:000");
+        timerValue2.setText("000:00:00:000");
         dobrenalepki = 0;
         zlenalepki = 0;
         j = 0;
@@ -1623,7 +1669,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         }
     };
 
-    //------------------------FUNKCJA REALIZUJĄCA STOPER:-------------------------------------------
+    //------------------------FUNKCJA REALIZUJĄCA STOPER DO BIEGU:-------------------------------------------
 
     private Runnable updateTimerThread = new Runnable() {
 
@@ -1645,6 +1691,33 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
         }
 
     };
+
+
+    //------------------FUNKCJA REALIZUJĄCA STOPER DO CZASU MIĘDZY NALEPKAMI:----------------------
+
+    private Runnable updateTimerThread2 = new Runnable() {
+
+        public void run() {
+
+            timeInMilliseconds2 = SystemClock.uptimeMillis() - startTime2;
+
+            updatedTime2 = timeSwapBuff2 + timeInMilliseconds2;
+
+            int secs2 = (int) (updatedTime2 / 1000);
+            int mins2 = secs2 / 60;
+            int hours2 = mins2 / 60;
+            secs2 = secs2 % 60;
+            int milliseconds2 = (int) (updatedTime2 % 1000);
+            timerValue.setText(String.format("%03d", hours2) + ":" + String.format("%02d", mins2) + ":"
+                    + String.format("%02d", secs2) + ":"
+                    + String.format("%03d", milliseconds2));
+            customHandler2.postDelayed(this, 0);
+        }
+
+    };
+
+
+
 
     //--------------------- FUNKCJA REALIZUJĄCA ODCZYT Z PLIKU TXT----------------------------------
 

@@ -80,10 +80,10 @@
         android:layout_height="wrap_content"
         android:text="Prędkość biegu:"
         android:id="@+id/textView30"
-        android:layout_marginRight="3sp"
-        android:layout_below="@+id/CzasBiegu"
-        android:layout_alignParentStart="true"
-        android:layout_marginLeft="5sp" />
+        android:layout_below="@+id/textView46"
+        android:layout_alignLeft="@+id/textView46"
+        android:layout_alignStart="@+id/textView46"
+        android:layout_marginRight="3sp" />
 
     <TextView
         android:layout_width="wrap_content"
@@ -108,8 +108,8 @@
         android:layout_height="wrap_content"
         android:text="-/-"
         android:id="@+id/textView33"
-        android:layout_marginRight="3sp"
         android:layout_alignTop="@+id/textView28"
+        android:layout_toRightOf="@+id/textView28"
         android:layout_toEndOf="@+id/textView28" />
 
     <Button
@@ -138,6 +138,26 @@
         android:layout_marginRight="3sp"
         android:layout_below="@+id/button"
         android:layout_toEndOf="@+id/CzasBiegu" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Czas od zeskanowania bieżącej nalepki:"
+        android:id="@+id/textView46"
+        android:layout_below="@+id/CzasBiegu"
+        android:layout_alignLeft="@+id/CzasBiegu"
+        android:layout_alignStart="@+id/CzasBiegu"
+        android:layout_marginRight="3sp" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="000:00:00:000"
+        android:id="@+id/textView47"
+        android:layout_alignTop="@+id/textView46"
+        android:layout_toRightOf="@+id/textView46"
+        android:layout_toEndOf="@+id/textView46"
+        android:layout_marginRight="3sp" />
 
 
 </RelativeLayout>
