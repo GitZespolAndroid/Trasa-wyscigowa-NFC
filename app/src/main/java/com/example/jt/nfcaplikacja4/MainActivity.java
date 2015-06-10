@@ -184,14 +184,14 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
         Intent intent999 = new Intent(MainActivity.this,PlaceInformation.class);
 
-        if (InformacjeOMiejscu.size()!=0) {
+        if (InformacjeOMiejscu.size()==7 && b==1) {
 
-            intent999.putExtra("Nazwamiejsca", InformacjeOMiejscu.get(0));
-            intent999.putExtra("Wspolrzedne", InformacjeOMiejscu.get(1));
-            intent999.putExtra("Adres", InformacjeOMiejscu.get(2));
-            intent999.putExtra("AdresWWW", InformacjeOMiejscu.get(3));
-            intent999.putExtra("ZdjecieAdresWWW", InformacjeOMiejscu.get(4));
-            intent999.putExtra("OpisMiejsca", InformacjeOMiejscu.get(5));
+            intent999.putExtra("Nazwamiejsca", InformacjeOMiejscu.get(1));
+            intent999.putExtra("Wspolrzedne", InformacjeOMiejscu.get(2));
+            intent999.putExtra("Adres", InformacjeOMiejscu.get(3));
+            intent999.putExtra("AdresWWW", InformacjeOMiejscu.get(4));
+            intent999.putExtra("ZdjecieAdresWWW", InformacjeOMiejscu.get(5));
+            intent999.putExtra("OpisMiejsca", InformacjeOMiejscu.get(6));
         }
 
 
@@ -431,13 +431,18 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
             case 1 :
 
-                Intent intent = new Intent(this,PlaceInformation.class);
-                intent.putExtra("Nazwamiejsca",InformacjeOMiejscu.get(1));
-                intent.putExtra("Wspolrzedne",InformacjeOMiejscu.get(2));
-                intent.putExtra("Adres",InformacjeOMiejscu.get(3));
-                intent.putExtra("AdresWWW",InformacjeOMiejscu.get(4));
-                intent.putExtra("ZdjecieAdresWWW",InformacjeOMiejscu.get(5));
-                intent.putExtra("OpisMiejsca",InformacjeOMiejscu.get(6));
+                Intent intent = new Intent(MainActivity.this,PlaceInformation.class);
+
+                if (InformacjeOMiejscu.size()!=0 && InformacjeOMiejscu.size()==7 && b==1) {
+
+                    intent.putExtra("Nazwamiejsca", InformacjeOMiejscu.get(1));
+                    intent.putExtra("Wspolrzedne", InformacjeOMiejscu.get(2));
+                    intent.putExtra("Adres", InformacjeOMiejscu.get(3));
+                    intent.putExtra("AdresWWW", InformacjeOMiejscu.get(4));
+                    intent.putExtra("ZdjecieAdresWWW", InformacjeOMiejscu.get(5));
+                    intent.putExtra("OpisMiejsca", InformacjeOMiejscu.get(6));
+                }
+
                 startActivity(intent);
 
                 break;
@@ -1064,9 +1069,9 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
             String[] arr;
 
             InformacjeOMiejscu.clear();
+            LatLng currentPosition = new LatLng(lan, lng);
 
             arr = result.split(",");
-
 
             for (int i = 0; i<arr.length; i++){
 
@@ -1074,7 +1079,7 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
             }
 
-            if (arr.length !=0){
+            if (arr.length ==0){
 
                 Toast.makeText(MainActivity.this, "Nalepka jest pusta!", Toast.LENGTH_LONG).show();
 
@@ -1086,11 +1091,14 @@ public class MainActivity extends ActionBarActivity implements LocationListener,
 
             }
 
+            if (arr.length>7){
 
+                Toast.makeText(MainActivity.this, "Nalepka zawiera za dużo danych!", Toast.LENGTH_LONG).show();
+
+            }
 
             if (arr.length == 7 && !START.isEnabled()==true && !STOP.isEnabled()==false) {
 
-                LatLng currentPosition = new LatLng(lan, lng);
 
                 if (Math.abs(Double.valueOf(Wspolrzedna1.get(j))-currentPosition.latitude)<=0.01 && Math.abs(Double.valueOf(Wspolrzedna2.get(j))-currentPosition.longitude)<=0.01){
 
